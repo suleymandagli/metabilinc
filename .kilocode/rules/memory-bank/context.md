@@ -15,6 +15,15 @@ Metabilinc, anne ve baba eğitimleri için kapsamlı bir kurs funnel sistemidir.
 - [x] Background: `#FFFFFF` (beyaz)
 - [x] Secondary: `#E5E7EB` (destek gri)
 
+### Admin Panel (Tam İşlevsel)
+- [x] Veritabanı entegrasyonu
+- [x] Kurs CRUD (oluştur, oku, güncelle, sil)
+- [x] Sipariş yönetimi
+- [x] Lead yönetimi
+- [x] İstatistikler (gelir, öğrenci, kurs sayıları)
+- [x] Kurs ekleme/düzenleme modal formu
+- [x] API routes: `/api/admin/courses`, `/api/admin/orders`, `/api/admin/leads`, `/api/admin/stats`
+
 ### Sayfalar
 - [x] Ana Sayfa
 - [x] Kurslar Listesi
@@ -58,7 +67,7 @@ src/
 
 1. İyzico/PayTR gerçek API entegrasyonu
 2. NextAuth.js ile kullanıcı girişi
-3. Veritabanı migrate
+3. Veritabanı migrate (veritabanını oluşturma)
 4. Gerçek içerik ekleme
 5. Deployment (Vercel/Netlify)
 
