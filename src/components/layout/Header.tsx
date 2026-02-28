@@ -18,6 +18,7 @@ const navigation = [
   },
   { name: "Hakkımızda", href: "/hakkimizda" },
   { name: "İletişim", href: "/iletisim" },
+  { name: "Blog", href: "/blog" },
 ];
 
 export function Header() {
