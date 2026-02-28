@@ -4,40 +4,36 @@
   --font-display: "Playfair Display", serif;
   --font-body: "Inter", sans-serif;
   
-  /* Premium Renk Paleti - Lüks & Sofistike */
-  /* Primary: Derin & Zengin Yeşil */
-  --color-primary: #1B4332;
-  --color-primary-light: #2D5A45;
-  --color-primary-dark: #0F2A1F;
+  /* Ana Renk Paleti - Antrasit & Turuncu */
+  /* Primary: Antrasit/Koyu Gri */
+  --color-primary: #1F2937;
+  --color-primary-light: #374151;
+  --color-primary-dark: #111827;
   
-  /* Secondary: Şık Krem/Şampanya */
-  --color-secondary: #F5F0E8;
-  --color-secondary-light: #FDFCFA;
-  --color-secondary-dark: #E8E0D4;
+  /* Secondary: Turuncu Vurgu */
+  --color-accent: #F97316;
+  --color-accent-light: #FB923C;
+  --color-accent-dark: #EA580C;
   
-  /* Accent: Premium Altın/Bronz */
-  --color-accent: #B8860B;
-  --color-accent-light: #D4A853;
-  --color-accent-dark: #8B6914;
+  /* Destek Gri */
+  --color-secondary: #E5E7EB;
+  --color-secondary-light: #F3F4F6;
+  --color-secondary-dark: #D1D5DB;
   
-  /* Metin: Zengin Gri */
-  --color-text: #1C1C1C;
-  --color-text-light: #3D3D3D;
-  --color-text-muted: #6B6B6B;
+  /* Metin: Koyu Gri */
+  --color-text: #1F2937;
+  --color-text-light: #4B5563;
+  --color-text-muted: #6B7280;
   
-  /* Arka Plan: Sıcak Beyaz */
-  --color-background: #FAF9F7;
+  /* Arka Plan: Beyaz */
+  --color-background: #FFFFFF;
   --color-surface: #FFFFFF;
-  --color-border: #E5E2DC;
+  --color-border: #E5E7EB;
   
   /* Başarı/Hata/Uyarı */
-  --color-success: #2E7D4A;
-  --color-error: #C53030;
-  --color-warning: #D69E2E;
-  
-  /* Premium Vurgu Renkleri */
-  --color-luxury: #8B7355;
-  --color-luxury-light: #A69076;
+  --color-success: #10B981;
+  --color-error: #EF4444;
+  --color-warning: #F59E0B;
 }
 
 @layer base {
@@ -116,7 +112,7 @@
   }
   
   .gradient-hero {
-    @apply bg-gradient-to-br from-primary-dark via-primary to-luxury;
+    @apply bg-gradient-to-br from-primary-dark via-primary to-accent;
   }
 }
 
@@ -161,5 +157,5 @@
 
 /* Selection */
 ::selection {
-  @apply bg-primary/20 text-primary;
+  @apply bg-accent/20 text-primary;
 }
