@@ -4,24 +4,40 @@
   --font-display: "Playfair Display", serif;
   --font-body: "Inter", sans-serif;
   
-  /* Renk Paleti */
-  --color-primary: #2D5A27;
-  --color-primary-light: #4A7C43;
-  --color-primary-dark: #1E3D1A;
-  --color-secondary: #F5E6D3;
-  --color-secondary-light: #FFF8F0;
-  --color-accent: #E8A838;
-  --color-accent-light: #F5C85C;
-  --color-accent-dark: #C48A20;
-  --color-text: #1A1A1A;
-  --color-text-light: #4A4A4A;
+  /* Premium Renk Paleti - Lüks & Sofistike */
+  /* Primary: Derin & Zengin Yeşil */
+  --color-primary: #1B4332;
+  --color-primary-light: #2D5A45;
+  --color-primary-dark: #0F2A1F;
+  
+  /* Secondary: Şık Krem/Şampanya */
+  --color-secondary: #F5F0E8;
+  --color-secondary-light: #FDFCFA;
+  --color-secondary-dark: #E8E0D4;
+  
+  /* Accent: Premium Altın/Bronz */
+  --color-accent: #B8860B;
+  --color-accent-light: #D4A853;
+  --color-accent-dark: #8B6914;
+  
+  /* Metin: Zengin Gri */
+  --color-text: #1C1C1C;
+  --color-text-light: #3D3D3D;
   --color-text-muted: #6B6B6B;
-  --color-background: #FAFAFA;
+  
+  /* Arka Plan: Sıcak Beyaz */
+  --color-background: #FAF9F7;
   --color-surface: #FFFFFF;
-  --color-border: #E5E5E5;
-  --color-success: #22C55E;
-  --color-error: #EF4444;
-  --color-warning: #F59E0B;
+  --color-border: #E5E2DC;
+  
+  /* Başarı/Hata/Uyarı */
+  --color-success: #2E7D4A;
+  --color-error: #C53030;
+  --color-warning: #D69E2E;
+  
+  /* Premium Vurgu Renkleri */
+  --color-luxury: #8B7355;
+  --color-luxury-light: #A69076;
 }
 
 @layer base {
@@ -93,6 +109,14 @@
   
   .gradient-text {
     @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+  }
+  
+  .gradient-luxury {
+    @apply bg-gradient-to-br from-primary-dark via-primary to-primary-light;
+  }
+  
+  .gradient-hero {
+    @apply bg-gradient-to-br from-primary-dark via-primary to-luxury;
   }
 }
 
