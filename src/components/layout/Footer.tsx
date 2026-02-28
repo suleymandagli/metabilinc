@@ -41,7 +41,7 @@ export function Footer() {
                 <BookOpen className="w-6 h-6" />
               </div>
               <span className="font-display text-2xl font-bold">
-                Metabilinc
+                Metabilinç Akademi
               </span>
             </Link>
             <p className="text-white/80 mb-6 max-w-md">
@@ -120,7 +120,7 @@ export function Footer() {
         <div className="container-main py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-white/60 text-sm">
-              © {new Date().getFullYear()} Metabilinc. Tüm hakları saklıdır.
+              © {new Date().getFullYear()} Metabilinç Akademi. Tüm hakları saklıdır.
             </p>
             <div className="flex items-center gap-4">
               {socialLinks.map((social) => (

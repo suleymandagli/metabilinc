@@ -35,7 +35,7 @@ export function Header() {
               <BookOpen className="w-5 h-5 text-white" />
             </div>
             <span className="font-display text-xl font-bold text-primary">
-              Metabilinc
+              Metabilinç Akademi
             </span>
           </Link>
 
