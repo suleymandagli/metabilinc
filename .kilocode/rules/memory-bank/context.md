@@ -2,31 +2,19 @@
 
 ## Current State
 
-**Proje Durumu:** ✅ Tamamlandı - Derleme başarılı
+**Proje Durumu:** ✅ Tamamlandı - Build başarılı
 
-Metabilinc, anne ve baba eğitimleri için kapsamlı bir kurs funnel sistemidir. WordPress yerine modern Next.js 16 ile geliştirilmiştir.
+Metabilinc, anne ve baba eğitimleri için kapsamlı bir kurs funnel sistemidir. Premium renk paleti güncellendi.
 
 ## Tamamlanan Özellikler
 
-### Frontend Sayfalar
-- [x] Ana Sayfa - Hero, öne çıkan kurslar, yorumlar, ücretsiz e-kitap lead capture
-- [x] Kurslar Sayfası - Filtreleme, arama, grid/list görünümü
-- [x] Tek Kurs Sayfası - Müfredat, eğitmen, yorumlar, SSS, satın alma
-- [x] Ücretsiz Mini Kurs - Lead capture formu
-- [x] Ödeme Sayfası - İyzico/PayTR hazırlığı, taksit seçenekleri
-- [x] Kullanıcı Dashboard - Kayıtlı kurslar, ilerleme, sertifikalar, siparişler
-- [x] Admin Panel - Kurs yönetimi, siparişler, leadler, ödeme ayarları
-
-### Backend/Veritabanı
-- [x] Drizzle ORM şeması (users, courses, modules, lessons, enrollments, leads, orders, reviews, offers)
-- [x] SQLite veritabanı yapılandırması
-- [x] API route yapıları (admin, auth, kurslar, lead, ödeme)
-
-### Tasarım Sistemi
-- [x] Modern UI bileşenleri (Header, Footer, CourseCard)
-- [x] Tailwind CSS 4 ile özel tema (primary: #2D5A27, accent: #E8A838)
-- [x] Framer Motion animasyonları
-- [x] Responsive tasarım
+### Tasarım Sistemi (Güncellendi)
+- [x] Premium renk paleti - Lüks yeşil & altın tonları
+- [x] Primary: `#1B4332` (derin forest green)
+- [x] Secondary: `#F5F0E8` (şık krem/şampanya)
+- [x] Accent: `#B8860B` (premium altın/bronze)
+- [x] Background: `#FAF9F7` (sıcak beyaz)
+- [x] Luxury gradient sınıfları eklendi
 
 ## Yapı
 
