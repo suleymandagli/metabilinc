@@ -163,7 +163,7 @@ export default function MiniKursPage() {
                 {!submitted ? (
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="text-center mb-6">
-                      <h4 className="font-display text-xl font-semibold">Ücretsiz Kaydol</h4>
+                      <h4 className="font-display text-2xl font-bold text-accent mb-2">Ücretsiz Kaydol</h4>
                       <p className="text-text-muted text-sm">
                         Bu mini kursa hemen erişin
                       </p>
