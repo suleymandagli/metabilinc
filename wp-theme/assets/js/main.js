@@ -211,9 +211,42 @@
             // Göster/gizle
             if (preview.style.display === 'none') {
                 preview.style.display = 'block';
+                // Scroll to preview
+                setTimeout(function() {
+                    preview.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
             } else {
                 preview.style.display = 'none';
             }
+        }
+    };
+    
+    // Paylaşım kartını indir
+    window.metabilincDownloadCard = function() {
+        var canvas = document.getElementById('share-card-canvas');
+        if (!canvas) {
+            alert('Paylaşım kartı bulunamadı!');
+            return;
+        }
+        
+        // Canvas'ı resim olarak kaydetmek için html2canvas kullan
+        if (typeof html2canvas !== 'undefined') {
+            html2canvas(canvas, {
+                scale: 2,
+                backgroundColor: null,
+                useCORS: true
+            }).then(function(renderedCanvas) {
+                var link = document.createElement('a');
+                link.download = 'metabilinc-kurs-paylasim.png';
+                link.href = renderedCanvas.toDataURL('image/png');
+                link.click();
+            }).catch(function(err) {
+                console.error('Kart indirme hatası:', err);
+                alert('Kart indirilirken bir hata oluştu.');
+            });
+        } else {
+            // html2canvas yoksa alternatif yöntem
+            alert('Paylaşım kartını indirmek için lütfen ekran görüntüsü alın veya Instagram Story özelliğini kullanın.');
         }
     };
     

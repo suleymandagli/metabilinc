@@ -1228,11 +1228,23 @@ button, input, textarea, select {
 }
 
 .course-purchase-card {
+    position: relative;
     background: white;
     border-radius: var(--radius-2xl);
     box-shadow: var(--shadow-xl);
     padding: 2rem;
-    border: 1px solid var(--color-border);
+    border: 2px solid var(--color-accent); /* Orange border to differentiate */
+    overflow: hidden;
+}
+
+.course-purchase-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
 }
 
 .course-purchase-price {
@@ -1251,7 +1263,7 @@ button, input, textarea, select {
 .course-purchase-current {
     font-size: 2.5rem;
     font-weight: 700;
-    color: var(--color-primary);
+    color: var(--color-accent); /* Orange accent color */
 }
 
 .course-purchase-features {

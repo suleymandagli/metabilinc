@@ -76,16 +76,26 @@ if (!$course_enrolled) $course_enrolled = rand(100, 5000);
                 <?php the_content(); ?>
                 
                 <!-- Paylaş Bölümü -->
-                <div class="course-share-section" style="margin-top: 3rem; padding: 2rem; background: var(--color-secondary-light); border-radius: 1rem;">
-                    <h3 style="margin-bottom: 1rem;"><?php esc_html_e('Bu Kursu Paylaş', 'metabilinc'); ?></h3>
+                <div class="course-share-section" style="margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, var(--color-secondary-light) 0%, #fff7ed 100%); border-radius: 1rem; border: 1px solid var(--color-accent);">
+                    <h3 style="margin-bottom: 1rem; color: var(--color-accent);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 0.5rem;">
+                            <circle cx="18" cy="5" r="3"></circle>
+                            <circle cx="6" cy="12" r="3"></circle>
+                            <circle cx="18" cy="19" r="3"></circle>
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                        </svg>
+                        <?php esc_html_e('Bu Kursu Paylaş', 'metabilinc'); ?>
+                    </h3>
                     
                     <!-- Paylaş Butonları -->
-                    <div class="share-buttons" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <div class="share-buttons" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
                         <!-- WhatsApp -->
                         <a href="https://wa.me/?text=<?php echo urlencode(get_the_title() . ' - ' . get_permalink()); ?>" 
                            target="_blank" 
                            class="btn btn-secondary share-btn share-whatsapp"
                            data-platform="whatsapp"
+                           style="background: #25D366; color: white; border: none;"
                            aria-label="WhatsApp'ta paylaş">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
@@ -98,11 +108,12 @@ if (!$course_enrolled) $course_enrolled = rand(100, 5000);
                            target="_blank" 
                            class="btn btn-secondary share-btn share-twitter"
                            data-platform="twitter"
+                           style="background: #000000; color: white; border: none;"
                            aria-label="Twitter'da paylaş">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
                             </svg>
-                            Twitter
+                            X (Twitter)
                         </a>
                         
                         <!-- Facebook -->
@@ -110,6 +121,7 @@ if (!$course_enrolled) $course_enrolled = rand(100, 5000);
                            target="_blank" 
                            class="btn btn-secondary share-btn share-facebook"
                            data-platform="facebook"
+                           style="background: #1877F2; color: white; border: none;"
                            aria-label="Facebook'ta paylaş">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
@@ -122,6 +134,7 @@ if (!$course_enrolled) $course_enrolled = rand(100, 5000);
                            target="_blank" 
                            class="btn btn-secondary share-btn share-linkedin"
                            data-platform="linkedin"
+                           style="background: #0A66C2; color: white; border: none;"
                            aria-label="LinkedIn'de paylaş">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
@@ -131,25 +144,51 @@ if (!$course_enrolled) $course_enrolled = rand(100, 5000);
                             LinkedIn
                         </a>
                         
-                        <!-- Instagram Story için kopyalama -->
-                        <button type="button" 
-                                class="btn btn-secondary share-btn share-instagram"
-                                data-platform="instagram"
-                                onclick="metabilincShareCard('<?php echo esc_js(get_the_title()); ?>', '<?php echo esc_js(get_the_excerpt()); ?>', '<?php echo esc_url(get_permalink()); ?>')"
-                                aria-label="Instagram'da paylaş">
+                        <!-- Telegram -->
+                        <a href="https://t.me/share/url?url=<?php echo urlencode(get_permalink()); ?>&text=<?php echo urlencode(get_the_title()); ?>" 
+                           target="_blank" 
+                           class="btn btn-secondary share-btn share-telegram"
+                           data-platform="telegram"
+                           style="background: #0088cc; color: white; border: none;"
+                           aria-label="Telegram'da paylaş">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                             </svg>
-                            Instagram
-                        </button>
+                            Telegram
+                        </a>
+                        
+                        <!-- Pinterest -->
+                        <a href="https://pinterest.com/pin/create/button/?url=<?php echo urlencode(get_permalink()); ?>&description=<?php echo urlencode(get_the_title()); ?>" 
+                           target="_blank" 
+                           class="btn btn-secondary share-btn share-pinterest"
+                           data-platform="pinterest"
+                           style="background: #E60023; color: white; border: none;"
+                           aria-label="Pinterest'te paylaş">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2C6.48 2 2 6.48 2 12c0 4.25 2.67 7.87 6.42 9.31-.09-.78-.17-1.98.04-2.83.18-.77 1.2-5.07 1.2-5.07s-.31-.62-.31-1.54c0-1.44.84-2.52 1.88-2.52.89 0 1.32.67 1.32 1.47 0 .89-.57 2.23-.86 3.47-.25 1.04.52 1.88 1.54 1.88 1.85 0 3.27-1.95 3.27-4.77 0-2.49-1.79-4.24-4.35-4.24-2.96 0-4.7 2.22-4.7 4.52 0 .89.34 1.85.77 2.37.08.1.09.19.07.29-.08.31-.26 1.02-.29 1.16-.05.18-.16.22-.36.13-1.35-.63-2.19-2.6-2.19-4.19 0-3.41 2.48-6.54 7.15-6.54 3.75 0 6.67 2.68 6.67 6.25 0 3.73-2.35 6.73-5.61 6.73-1.1 0-2.13-.57-2.48-1.24l-.68 2.58c-.24.94-.9 2.12-1.34 2.84 1.01.31 2.08.48 3.19.48 5.52 0 10-4.48 10-10S17.52 2 12 2z"></path>
+                            </svg>
+                            Pinterest
+                        </a>
+                        
+                        <!-- Email -->
+                        <a href="mailto:?subject=<?php echo urlencode(get_the_title()); ?>&body=<?php echo urlencode('Bu kursu incelemenizi öneriyorum: ' . get_permalink()); ?>" 
+                           class="btn btn-secondary share-btn share-email"
+                           data-platform="email"
+                           style="background: var(--color-primary); color: white; border: none;"
+                           aria-label="E-posta ile paylaş">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            E-posta
+                        </a>
                         
                         <!-- Link Kopyala -->
                         <button type="button" 
                                 class="btn btn-secondary share-btn share-copy"
                                 data-platform="copy"
                                 onclick="metabilincCopyLink('<?php echo esc_js(get_permalink()); ?>')"
+                                style="background: var(--color-accent); color: white; border: none;"
                                 aria-label="Linki kopyala">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
@@ -159,42 +198,71 @@ if (!$course_enrolled) $course_enrolled = rand(100, 5000);
                         </button>
                     </div>
                     
+                    <!-- Paylaşım Kartı -->
+                    <div style="margin-top: 2rem;">
+                        <button type="button" 
+                                onclick="metabilincShareCard('<?php echo esc_js(get_the_title()); ?>', '<?php echo esc_js(wp_strip_all_tags(get_the_excerpt())); ?>', '<?php echo esc_url(get_permalink()); ?>')"
+                                style="background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); color: white; border: none; padding: 1rem 1.5rem; border-radius: 0.75rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; width: 100%; justify-content: center; font-size: 1rem; font-weight: 600;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                            📸 Paylaşım Kartı Oluştur & İndir
+                        </button>
+                    </div>
+                    
                     <!-- Paylaşım Kartı Önizleme (Gizli - Modal için) -->
-                    <div id="share-card-preview" style="display: none; margin-top: 1.5rem; padding: 1rem; background: white; border-radius: 0.5rem;">
-                        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">
-                            Instagram Story boyutunda paylaşım kartı:
+                    <div id="share-card-preview" style="display: none; margin-top: 1.5rem; padding: 1.5rem; background: white; border-radius: 1rem; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+                        <p style="font-weight: 600; margin-bottom: 1rem; color: var(--color-primary);">
+                            🎉 Instagram Story için paylaşım kartı:
                         </p>
-                        <div id="share-card-canvas" style="width: 320px; height: 568px; background: linear-gradient(135deg, #1F2937 0%, #F97316 100%); border-radius: 0.75rem; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; color: white;">
+                        <div id="share-card-canvas" style="width: 320px; height: 568px; background: linear-gradient(135deg, #1F2937 0%, #F97316 100%); border-radius: 1rem; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; color: white; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
                             <!-- Logo -->
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <div style="width: 32px; height: 32px; background: rgba(255,255,255,0.2); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                                         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                                         <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                                     </svg>
                                 </div>
-                                <span style="font-weight: 600;">Metabilinç Akademi</span>
+                                <span style="font-weight: 700; font-size: 1.125rem;">Metabilinç Akademi</span>
                             </div>
                             
                             <!-- İçerik -->
                             <div>
-                                <h4 id="share-card-title" style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.2;"></h4>
-                                <p id="share-card-desc" style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 1rem;"></p>
-                                <div style="font-size: 0.75rem; opacity: 0.8;">
-                                    👨‍👩‍👧‍👦 <?php echo number_format($course_enrolled); ?>+ kayıtlı
+                                <h4 id="share-card-title" style="font-size: 1.75rem; font-weight: 800; margin-bottom: 0.75rem; line-height: 1.2;"></h4>
+                                <p id="share-card-desc" style="font-size: 1rem; opacity: 0.9; margin-bottom: 1rem; line-height: 1.5;"></p>
+                                <div style="font-size: 0.875rem; opacity: 0.8; background: rgba(255,255,255,0.15); padding: 0.5rem 0.75rem; border-radius: 0.5rem; display: inline-block;">
+                                    👨‍👩‍👧‍👦 <?php echo number_format($course_enrolled); ?>+ kayıtlı öğrenci
                                 </div>
                             </div>
                             
                             <!-- Footer -->
-                            <div>
-                                <div style="font-size: 0.75rem; opacity: 0.7;">
+                            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 0.75rem; text-align: center;">
+                                <div style="font-size: 1rem; font-weight: 600;">
                                     👆 Kursu keşfetmek için tıkla
+                                </div>
+                                <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 0.25rem;">
+                                    metabilincakademi.com
                                 </div>
                             </div>
                         </div>
-                        <p style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.5rem;">
-                            Bu görseli kaydedip Instagram Story'de paylaşabilirsiniz.
-                        </p>
+                        <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem; justify-content: center;">
+                            <button type="button" onclick="metabilincDownloadCard()" 
+                                    style="background: var(--color-accent); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                İndir
+                            </button>
+                            <button type="button" onclick="document.getElementById('share-card-preview').style.display='none'" 
+                                    style="background: #e5e7eb; color: var(--color-text); border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600;">
+                                Kapat
+                            </button>
+                        </div>
                     </div>
                 </div>
                 

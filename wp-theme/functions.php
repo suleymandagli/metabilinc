@@ -84,8 +84,11 @@ function metabilinc_scripts() {
     // Ana stil dosyası
     wp_enqueue_style('metabilinc-style', get_stylesheet_uri(), array(), METABILINC_VERSION);
     
+    // html2canvas for share card download
+    wp_enqueue_script('html2canvas', 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', array(), '1.4.1', true);
+    
     // Tema JavaScript
-    wp_enqueue_script('metabilinc-main', get_template_directory_uri() . '/assets/js/main.js', array('jquery'), METABILINC_VERSION, true);
+    wp_enqueue_script('metabilinc-main', get_template_directory_uri() . '/assets/js/main.js', array('jquery', 'html2canvas'), METABILINC_VERSION, true);
     
     // Yerelleştirme
     wp_localize_script('metabilinc-main', 'metabilincData', array(
