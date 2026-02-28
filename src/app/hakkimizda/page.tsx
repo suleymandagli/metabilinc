@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CheckCircle, Heart, Users, Lightbulb } from "lucide-react";
@@ -59,12 +60,14 @@ export default function HakkimizdaPage() {
             <div className="order-1 lg:order-2">
               <div className="relative">
                 <div className="aspect-square max-w-md mx-auto bg-gradient-to-br from-secondary to-secondary-dark rounded-3xl overflow-hidden flex items-center justify-center">
-                  <div className="text-center p-8">
-                    <div className="w-32 h-32 mx-auto mb-6 bg-primary/10 rounded-full flex items-center justify-center">
-                      <Users className="w-16 h-16 text-primary" />
-                    </div>
-                    <p className="text-2xl font-bold text-primary">30+ Yıl</p>
-                    <p className="text-text-muted">Saha Deneyimi</p>
+                  <div className="relative w-full h-full min-h-[400px]">
+                    <Image
+                      src="/suleyman.jpg"
+                      alt="Süleyman Dağlı - Kurucu"
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
                   </div>
                 </div>
                 <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-accent rounded-2xl flex items-center justify-center shadow-xl">
