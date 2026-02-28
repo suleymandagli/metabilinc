@@ -4,9 +4,40 @@
 
 **Proje Durumu:** ✅ Tamamlandı - Build başarılı
 
-Metabilinc, anne ve baba eğitimleri için kapsamlı bir kurs funnel sistemidir. Güncel renk paleti uygulandı.
+Metabilinc, anne ve baba eğitimleri için kapsamlı bir kurs funnel sistemidir. 
+- Next.js versiyonu: Tamamlandı
+- **WordPress Tema versiyonu:** ✅ Tamamlandı
 
 ## Tamamlanan Özellikler
+
+### WordPress Tema
+- [x] `wp-theme/` klasörü oluşturuldu
+- [x] style.css - Tema meta verileri ve tam CSS tasarım sistemi
+- [x] functions.php - Tema fonksiyonları, custom post type, AJAX handlers
+- [x] header.php - Header şablonu
+- [x] footer.php - Footer şablonu
+- [x] index.php - Ana sayfa şablonu
+- [x] page.php - Standart sayfa şablonu
+- [x] archive-course.php - Kurslar listesi
+- [x] single-course.php - Kurs detay sayfası + **Paylaş & Hediye özellikleri**
+- [x] template-parts/content-course-card.php - Kurs kartı bileşeni
+- [x] inc/class-metabilinc-walker-nav-menu.php - Menü walker
+- [x] assets/js/main.js - JavaScript (mobil menü, lead form, paylaş, hediye)
+
+#### Paylaş Özellikleri (single-course.php)
+- [x] WhatsApp paylaşımı
+- [x] Twitter/X paylaşımı
+- [x] Facebook paylaşımı
+- [x] LinkedIn paylaşımı
+- [x] Instagram Story için grafik kartı (320x568px, story boyutu)
+- [x] Link kopyalama
+
+#### Hediye Et Özelliği
+- [x] Hediye formu (alıcı adı, e-posta, mesaj)
+- [x] Benzersiz hediye token oluşturma
+- [x] Hediye bağlantısı oluşturma ve paylaşma
+- [x] Veritabanına hediye kaydetme
+- [x] Hediye kullanım takibi
 
 ### Tasarım Sistemi (Güncel)
 - [x] Ana renk paleti - Antrasit & Turuncu
