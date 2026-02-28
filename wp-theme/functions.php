@@ -625,6 +625,18 @@ add_action('after_switch_theme', 'metabilinc_after_switch_theme');
 // Tema yeniden etkinleştirildiğinde de sayfaları oluştur
 add_action('switch_theme', 'metabilinc_create_default_pages');
 
+// İlk admin yüklemesinde sayfaları kontrol et ve oluştur
+function metabilinc_maybe_create_pages() {
+    // Sayfalar daha önce oluşturuldu mu kontrol et
+    $pages_created = get_option('metabilinc_default_pages_created', false);
+    
+    if (!$pages_created) {
+        metabilinc_create_default_pages();
+        update_option('metabilinc_default_pages_created', true);
+    }
+}
+add_action('admin_init', 'metabilinc_maybe_create_pages');
+
 // Varsayılan sayfaları oluştur
 function metabilinc_create_default_pages() {
     $pages = array(
