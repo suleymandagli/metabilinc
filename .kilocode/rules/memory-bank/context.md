@@ -4,17 +4,27 @@
 
 **Proje Durumu:** ✅ Tamamlandı - Build başarılı
 
-Metabilinc, anne ve baba eğitimleri için kapsamlı bir kurs funnel sistemidir. Premium renk paleti güncellendi.
+Metabilinc, anne ve baba eğitimleri için kapsamlı bir kurs funnel sistemidir. Güncel renk paleti uygulandı.
 
 ## Tamamlanan Özellikler
 
-### Tasarım Sistemi (Güncellendi)
-- [x] Premium renk paleti - Lüks yeşil & altın tonları
-- [x] Primary: `#1B4332` (derin forest green)
-- [x] Secondary: `#F5F0E8` (şık krem/şampanya)
-- [x] Accent: `#B8860B` (premium altın/bronze)
-- [x] Background: `#FAF9F7` (sıcak beyaz)
-- [x] Luxury gradient sınıfları eklendi
+### Tasarım Sistemi (Güncel)
+- [x] Ana renk paleti - Antrasit & Turuncu
+- [x] Primary: `#1F2937` (antrasit)
+- [x] Accent: `#F97316` (turuncu)
+- [x] Background: `#FFFFFF` (beyaz)
+- [x] Secondary: `#E5E7EB` (destek gri)
+
+### Sayfalar
+- [x] Ana Sayfa
+- [x] Kurslar Listesi
+- [x] Kurs Detay Sayfası
+- [x] Ödeme Sayfası
+- [x] Mini Kurs
+- [x] Dashboard
+- [x] Admin Panel
+- [x] **Hakkımızda** (yeni eklendi)
+- [x] **İletişim** (yeni eklendi)
 
 ## Yapı
 
