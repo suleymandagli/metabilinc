@@ -3980,3 +3980,1310 @@ button, input, textarea, select {
 .form-submit input[type="submit"]:hover {
     background: #ea580c;
 }
+
+/* =============================================
+   EĞİTMENLER SAYFASI - Instructors Page
+   ============================================= */
+.instructors-hero {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    padding: 120px 0 80px;
+    text-align: center;
+}
+
+.instructors-hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.instructors-hero-content h1 {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.instructors-hero-content p {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.instructors-section {
+    padding: 80px 0;
+    background: var(--color-surface);
+}
+
+.instructors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.instructor-card {
+    background: white;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.instructor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+.instructor-image {
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+    padding: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.instructor-placeholder {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    box-shadow: var(--shadow-md);
+}
+
+.instructor-content {
+    padding: 2rem;
+}
+
+.instructor-name {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+}
+
+.instructor-title {
+    color: var(--color-accent);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.instructor-bio {
+    color: var(--color-text-light);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+}
+
+.instructor-stats {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.instructor-stat {
+    text-align: center;
+}
+
+.instructor-stat-number {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.instructor-stat-label {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+}
+
+.instructor-social {
+    display: flex;
+    gap: 1rem;
+}
+
+.instructor-social-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text);
+    transition: all 0.2s;
+}
+
+.instructor-social-link:hover {
+    background: var(--color-accent);
+    color: white;
+}
+
+.instructors-cta {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    padding: 80px 0;
+    text-align: center;
+}
+
+.instructors-cta-content {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.instructors-cta-content h2 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.instructors-cta-content p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 2rem;
+}
+
+.instructors-cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* =============================================
+   SSS SAYFASI - FAQ Page
+   ============================================= */
+.faq-hero {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    padding: 120px 0 80px;
+    text-align: center;
+}
+
+.faq-hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.faq-hero-content h1 {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.faq-hero-content p {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.faq-section {
+    padding: 80px 0;
+    background: var(--color-surface);
+}
+
+.faq-category {
+    max-width: 900px;
+    margin: 0 auto 3rem;
+    padding: 0 1.5rem;
+}
+
+.faq-category-title {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    color: var(--color-text);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--color-accent);
+}
+
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.faq-item {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+}
+
+.faq-question {
+    width: 100%;
+    padding: 1.5rem;
+    background: none;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    text-align: left;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text);
+    transition: color 0.2s;
+}
+
+.faq-question:hover {
+    color: var(--color-accent);
+}
+
+.faq-icon {
+    color: var(--color-accent);
+    transition: transform 0.3s;
+}
+
+.faq-answer {
+    padding: 0 1.5rem 1.5rem;
+    display: none;
+}
+
+.faq-item.active .faq-answer {
+    display: block;
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(180deg);
+}
+
+.faq-answer p {
+    color: var(--color-text-light);
+    line-height: 1.7;
+}
+
+.faq-contact {
+    background: var(--color-secondary);
+    padding: 80px 0;
+    text-align: center;
+}
+
+.faq-contact-content h2 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+}
+
+.faq-contact-content p {
+    color: var(--color-text-light);
+    margin-bottom: 2rem;
+}
+
+.faq-contact-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* =============================================
+   GİZLİLİK VE YASAL SAYFALAR
+   ============================================= */
+.legal-hero {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    padding: 120px 0 80px;
+    text-align: center;
+}
+
+.legal-hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.legal-hero-content h1 {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.legal-hero-content p {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.legal-section {
+    padding: 80px 0;
+    background: var(--color-surface);
+}
+
+.legal-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.legal-updated {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.legal-content h2 {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    color: var(--color-text);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.legal-content h3 {
+    font-size: 1.25rem;
+    color: var(--color-text);
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.legal-content p {
+    color: var(--color-text-light);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.legal-content ul, .legal-content ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+.legal-content li {
+    color: var(--color-text-light);
+    line-height: 1.8;
+    margin-bottom: 0.5rem;
+}
+
+.legal-content a {
+    color: var(--color-accent);
+    text-decoration: underline;
+}
+
+.legal-content a:hover {
+    color: var(--color-accent-dark);
+}
+
+.legal-back {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* İADE SAYFASI */
+.refund-hero-box {
+    background: linear-gradient(135deg, var(--color-success) 0%, #059669 100%);
+    border-radius: 1.5rem;
+    padding: 3rem;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.refund-icon {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    color: var(--color-success);
+}
+
+.refund-hero-box h2 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.refund-hero-box p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.125rem;
+}
+
+.refund-steps {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0;
+}
+
+.refund-steps li {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid var(--color-accent);
+}
+
+.refund-steps li strong {
+    display: block;
+    font-size: 1.125rem;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+}
+
+.refund-steps li p {
+    color: var(--color-text-light);
+    margin: 0;
+}
+
+.refund-conditions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.refund-condition {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.refund-condition h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.refund-condition.positive h3 {
+    color: var(--color-success);
+}
+
+.refund-condition.negative h3 {
+    color: var(--color-error);
+}
+
+.refund-condition ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.refund-condition li {
+    padding: 0.5rem 0;
+    color: var(--color-text-light);
+}
+
+.refund-contact-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.refund-contact-option {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.refund-contact-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--color-secondary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    color: var(--color-accent);
+}
+
+.refund-contact-option h4 {
+    margin: 0 0 0.5rem;
+    color: var(--color-text);
+}
+
+.refund-contact-option p {
+    margin: 0;
+    color: var(--color-text-light);
+}
+
+.faq-list-mini {
+    margin-top: 2rem;
+}
+
+.faq-item-mini {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.faq-item-mini h4 {
+    margin: 0 0 0.5rem;
+    color: var(--color-text);
+}
+
+.faq-item-mini p {
+    margin: 0;
+    color: var(--color-text-light);
+}
+
+/* =============================================
+   ANA SAYFA TEMPLATE - Home Page Template
+   ============================================= */
+.home-hero {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 50%, var(--color-primary-light) 100%);
+    padding: 140px 0 100px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.home-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+}
+
+.home-hero-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.home-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.home-hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: white;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+}
+
+.home-hero h1 .text-accent {
+    color: var(--color-accent);
+}
+
+.home-hero p {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+.home-hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+}
+
+.home-hero-stats {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.home-hero-stat {
+    text-align: center;
+}
+
+.home-hero-stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+}
+
+.home-hero-stat-label {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.home-section-header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 3rem;
+    padding: 0 1.5rem;
+}
+
+.home-section-badge {
+    display: inline-block;
+    background: var(--color-secondary);
+    color: var(--color-accent);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.home-section-header h2 {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+}
+
+.home-section-header p {
+    font-size: 1.125rem;
+    color: var(--color-text-light);
+}
+
+.home-courses {
+    padding: 80px 0;
+    background: var(--color-surface);
+}
+
+.home-courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.home-courses-cta {
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.home-features {
+    padding: 80px 0;
+    background: var(--color-secondary);
+}
+
+.home-features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.feature-card {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.feature-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-light) 100%);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    color: white;
+}
+
+.feature-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--color-text);
+    margin-bottom: 0.75rem;
+}
+
+.feature-card p {
+    color: var(--color-text-light);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+}
+
+.home-testimonials {
+    padding: 80px 0;
+    background: var(--color-surface);
+}
+
+.home-testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.testimonial-card {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+}
+
+.testimonial-stars {
+    display: flex;
+    gap: 0.25rem;
+    color: #FBBF24;
+    margin-bottom: 1rem;
+}
+
+.testimonial-text {
+    font-size: 1.0625rem;
+    color: var(--color-text-light);
+    line-height: 1.7;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.testimonial-avatar {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.testimonial-author strong {
+    display: block;
+    color: var(--color-text);
+}
+
+.testimonial-author span {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+}
+
+.home-cta {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    padding: 80px 0;
+    text-align: center;
+}
+
+.home-cta-content {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.home-cta-content h2 {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.home-cta-content p {
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 2rem;
+    font-size: 1.125rem;
+}
+
+.home-cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* =============================================
+   KURSLAR SAYFASI - Courses Page
+   ============================================= */
+.courses-hero {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    padding: 120px 0 80px;
+    text-align: center;
+}
+
+.courses-hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.courses-hero-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.courses-hero h1 {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.courses-hero p {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.courses-filters {
+    background: var(--color-secondary);
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.courses-filters-wrapper {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.courses-search {
+    flex: 1;
+    min-width: 250px;
+    position: relative;
+}
+
+.courses-search svg {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+}
+
+.courses-search-input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 3rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    background: white;
+}
+
+.courses-search-input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+.courses-filter-group {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.courses-filter-select {
+    padding: 0.75rem 2rem 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    font-size: 0.9375rem;
+    background: white;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+}
+
+.courses-filter-select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+.courses-section {
+    padding: 60px 0;
+    background: var(--color-surface);
+    min-height: 60vh;
+}
+
+.courses-results {
+    max-width: var(--container-max);
+    margin: 0 auto 2rem;
+    padding: 0 1.5rem;
+}
+
+.courses-results p {
+    color: var(--color-text-light);
+}
+
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.courses-no-results {
+    text-align: center;
+    padding: 4rem 1.5rem;
+    max-width: var(--container-max);
+    margin: 0 auto;
+}
+
+.courses-no-results svg {
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.courses-no-results h3 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+}
+
+.courses-no-results p {
+    color: var(--color-text-light);
+    margin-bottom: 1.5rem;
+}
+
+.courses-cta {
+    background: var(--color-secondary);
+    padding: 80px 0;
+    text-align: center;
+}
+
+.courses-cta-content h2 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+}
+
+.courses-cta-content p {
+    color: var(--color-text-light);
+    margin-bottom: 2rem;
+}
+
+.courses-cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Course Card Styles */
+.course-card {
+    background: white;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+.course-card-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: var(--color-accent);
+    color: white;
+    padding: 0.375rem 0.75rem;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    z-index: 10;
+}
+
+.course-card-badge-free {
+    background: var(--color-success);
+}
+
+.course-card-image {
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 180px;
+}
+
+.course-card-placeholder {
+    color: var(--color-text-muted);
+}
+
+.course-card-free .course-card-image {
+    background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+}
+
+.course-card-content {
+    padding: 1.5rem;
+}
+
+.course-card-category {
+    display: inline-block;
+    color: var(--color-accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.course-card-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+}
+
+.course-card-description {
+    color: var(--color-text-light);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.course-card-meta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+}
+
+.course-card-duration {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.course-card-level {
+    background: var(--color-secondary);
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.course-card-stats {
+    display: flex;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+    margin-bottom: 1rem;
+}
+
+.course-card-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+}
+
+.course-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.course-card-price {
+    display: flex;
+    flex-direction: column;
+}
+
+.course-card-price-original {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    text-decoration: line-through;
+}
+
+.course-card-price-current {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.course-card-free .course-card-price-current {
+    color: var(--color-success);
+}
+
+/* =============================================
+   Responsive Styles
+   ============================================= */
+@media (max-width: 768px) {
+    .home-hero h1,
+    .courses-hero h1,
+    .instructors-hero h1,
+    .faq-hero h1,
+    .legal-hero h1 {
+        font-size: 2rem;
+    }
+
+    .home-hero p,
+    .courses-hero p,
+    .instructors-hero p,
+    .faq-hero p,
+    .legal-hero p {
+        font-size: 1rem;
+    }
+
+    .home-hero-stats {
+        gap: 1.5rem;
+    }
+
+    .home-hero-stat-number {
+        font-size: 1.5rem;
+    }
+
+    .instructor-stats {
+        flex-wrap: wrap;
+    }
+
+    .courses-filters-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .courses-filter-group {
+        width: 100%;
+    }
+
+    .courses-filter-select {
+        flex: 1;
+        min-width: 140px;
+    }
+
+    .courses-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .home-courses-grid,
+    .home-features-grid,
+    .home-testimonials-grid,
+    .instructors-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-hero-buttons,
+    .home-cta-buttons,
+    .instructors-cta-buttons,
+    .faq-contact-buttons,
+    .courses-cta-buttons {
+        flex-direction: column;
+    }
+
+    .home-hero-buttons .btn,
+    .home-cta-buttons .btn,
+    .instructors-cta-buttons .btn,
+    .faq-contact-buttons .btn,
+    .courses-cta-buttons .btn {
+        width: 100%;
+    }
+
+    .legal-back {
+        flex-direction: column;
+    }
+
+    .legal-back .btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* =============================================
+   WordPress Required Styles
+   ============================================= */
+.alignwide {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.alignfull {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.wp-block-cover,
+.wp-block-cover-image {
+    min-height: 400px;
+}
+
+.wp-block-button__link {
+    background: var(--color-accent);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    color: white;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.wp-block-button__link:hover {
+    background: var(--color-accent-dark);
+    color: white;
+}
+
+/* Gutenberg Block Styles */
+.wp-block-group {
+    padding: 2rem 0;
+}
+
+.wp-block-media-text {
+    margin: 2rem 0;
+}
