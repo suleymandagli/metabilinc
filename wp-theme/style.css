@@ -213,7 +213,7 @@ button, input, textarea, select {
 }
 
 .btn-outline:hover {
- var(--color-primary    background-color:);
+    background-color: var(--color-primary);
     color: white;
 }
 
