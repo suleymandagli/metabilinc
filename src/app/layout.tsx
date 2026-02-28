@@ -1,33 +1,46 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const playfair = Playfair_Display({
   subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-body",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Next.js Template",
-  description: "A minimal Next.js starter template",
+  title: "Metabilinc | Bilinçli Aile ve Evlilik Eğitimleri",
+  description: "Anne ve babalara yönelik profesyonel eğitim platformu. Bilinçli Aile Okulu ve Bilinçli Evlilik Akademisi ile daha sağlıklı ilişkiler kurun.",
+  keywords: "aile eğitimi, evlilik kursu, anne baba eğitimi, çocuk gelişimi, iletişim becerileri, aile bilinci",
+  openGraph: {
+    title: "Metabilinc | Bilinçli Aile ve Evlilik Eğitimleri",
+    description: "Anne ve babalara yönelik profesyonel eğitim platformu",
+    type: "website",
+    locale: "tr_TR",
+  },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="tr" className={`${playfair.variable} ${inter.variable}`}>
+      <body className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );
