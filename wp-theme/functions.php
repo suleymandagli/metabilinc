@@ -574,7 +574,7 @@ function metabilinc_install() {
 }
 add_action('after_switch_theme', 'metabilinc_install');
 
-// Tema aktivasyonunda varsayılan menü oluş
+// Tema aktivasyonunda varsayılan menü oluştur
 function metabilinc_after_switch_theme() {
     // Ana menü konumu
     $primary_menu = wp_get_nav_menu_object('Ana Menü');
@@ -616,5 +616,89 @@ function metabilinc_after_switch_theme() {
         $locations['primary'] = $primary_menu_id;
         set_theme_mod('nav_menu_locations', $locations);
     }
+    
+    // Varsayılan sayfaları oluştur
+    metabilinc_create_default_pages();
 }
 add_action('after_switch_theme', 'metabilinc_after_switch_theme');
+
+// Tema yeniden etkinleştirildiğinde de sayfaları oluştur
+add_action('switch_theme', 'metabilinc_create_default_pages');
+
+// Varsayılan sayfaları oluştur
+function metabilinc_create_default_pages() {
+    $pages = array(
+        array(
+            'slug' => 'kurslar',
+            'title' => 'Kurslar',
+            'template' => 'template-kurslar.php',
+        ),
+        array(
+            'slug' => 'hakkimizda',
+            'title' => 'Hakkımızda',
+            'template' => 'template-hakkimizda.php',
+        ),
+        array(
+            'slug' => 'iletisim',
+            'title' => 'İletişim',
+            'template' => 'template-iletisim.php',
+        ),
+        array(
+            'slug' => 'blog',
+            'title' => 'Blog',
+            'template' => 'template-blog.php',
+        ),
+        array(
+            'slug' => 'egitmenler',
+            'title' => 'Eğitmenler',
+            'template' => 'template-egitmenler.php',
+        ),
+        array(
+            'slug' => 'sss',
+            'title' => 'Sıkça Sorulan Sorular',
+            'template' => 'template-sss.php',
+        ),
+        array(
+            'slug' => 'gizlilik',
+            'title' => 'Gizlilik Politikası',
+            'template' => 'template-gizlilik.php',
+        ),
+        array(
+            'slug' => 'kullanim-sartlari',
+            'title' => 'Kullanım Şartları',
+            'template' => 'template-kullanim-sartlari.php',
+        ),
+        array(
+            'slug' => 'iade',
+            'title' => 'İade Politikası',
+            'template' => 'template-iade.php',
+        ),
+        array(
+            'slug' => 'kvkk',
+            'title' => 'KVKK Aydınlatma Metni',
+            'template' => 'template-kvkk.php',
+        ),
+    );
+    
+    foreach ($pages as $page_data) {
+        $page = get_page_by_path($page_data['slug']);
+        
+        if (!$page) {
+            $page_id = wp_insert_post(array(
+                'post_title' => $page_data['title'],
+                'post_name' => $page_data['slug'],
+                'post_content' => '',
+                'post_status' => 'publish',
+                'post_type' => 'page',
+                'post_author' => 1,
+            ));
+            
+            if ($page_id && !is_wp_error($page_id)) {
+                update_post_meta($page_id, '_wp_page_template', $page_data['template']);
+            }
+        } else {
+            // Sayfa varsa şablonu güncelle
+            update_post_meta($page->ID, '_wp_page_template', $page_data['template']);
+        }
+    }
+}
