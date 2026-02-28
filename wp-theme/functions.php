@@ -678,6 +678,16 @@ function metabilinc_create_default_pages() {
             'title' => 'KVKK Aydınlatma Metni',
             'template' => 'template-kvkk.php',
         ),
+        array(
+            'slug' => 'bilincli-aile-okulu',
+            'title' => 'Bilinçli Aile Okulu',
+            'template' => 'template-bilincli-aile-okulu.php',
+        ),
+        array(
+            'slug' => 'bilincli-evlilik-akademisi',
+            'title' => 'Bilinçli Evlilik Akademisi',
+            'template' => 'template-bilincli-evlilik-akademisi.php',
+        ),
     );
     
     foreach ($pages as $page_data) {
