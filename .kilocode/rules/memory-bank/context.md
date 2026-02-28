@@ -25,6 +25,7 @@ Metabilinc, anne ve baba eğitimleri için kapsamlı bir kurs funnel sistemidir.
 - [x] Admin Panel
 - [x] **Hakkımızda** (yeni eklendi)
 - [x] **İletişim** (yeni eklendi)
+- [x] **Blog** (yeni eklendi)
 
 ## Yapı
 
@@ -39,7 +40,9 @@ src/
 │   ├── mini-kurs/page.tsx       # Ücretsiz mini kurs
 │   ├── odeme/[slug]/page.tsx   # Ödeme sayfası
 │   ├── dashboard/page.tsx       # Kullanıcı dashboard
-│   └── admin/page.tsx           # Admin panel
+│   ├── admin/page.tsx           # Admin panel
+│   ├── blog/page.tsx             # Blog sayfası
+│   └── hakkimizda/page.tsx       # Hakkımızda
 ├── components/
 │   ├── layout/                  # Header, Footer
 │   ├── sections/                # Hero, Courses, Testimonials, LeadCapture
