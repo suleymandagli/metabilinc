@@ -634,8 +634,20 @@ function metabilinc_maybe_create_pages() {
         metabilinc_create_default_pages();
         update_option('metabilinc_default_pages_created', true);
     }
+    
+    // Permalink kurallarını temizle
+    if (get_option('metabilinc_permalinks_flushed', false) === false) {
+        flush_rewrite_rules();
+        update_option('metabilinc_permalinks_flushed', true);
+    }
+    
+    // Örnek kursları oluştur
+    metabilinc_create_sample_courses();
 }
 add_action('admin_init', 'metabilinc_maybe_create_pages');
+
+// Tema aktivasyonunda da kursları oluştur
+add_action('after_switch_theme', 'metabilinc_create_sample_courses');
 
 // Varsayılan sayfaları oluştur
 function metabilinc_create_default_pages() {
@@ -724,3 +736,135 @@ function metabilinc_create_default_pages() {
         }
     }
 }
+
+// Örnek kursları oluştur
+function metabilinc_create_sample_courses() {
+    $courses_created = get_option('metabilinc_sample_courses_created', false);
+    
+    if ($courses_created) {
+        return;
+    }
+    
+    $sample_courses = array(
+        array(
+            'title' => 'Bilinçli Aile Eğitimi',
+            'slug' => 'bilincli-aile-egitimi',
+            'description' => 'Çocuklarınızla daha sağlıklı bir iletişim kurun. Bu kapsamlı eğitimde aile içi ilişkiler, çocuk psikolojisi ve etkili iletişim tekniklerini öğreneceksiniz.',
+            'price' => 2499,
+            'discounted_price' => 1499,
+            'duration' => '12 Hafta',
+            'level' => 'Başlangıç',
+            'enrolled' => 1250,
+            'category' => 'Aile Eğitimi'
+        ),
+        array(
+            'title' => 'Evlilik Akademisi',
+            'slug' => 'evlilik-akademisi',
+            'description' => 'Evliliğinizdeki sorunları çözün ve ilişkinizi güçlendirin. Profesyonel psikologlar eşliğinde iletişim, güven ve sevgi dolu bir evlilik için gerekli tüm bilgiler.',
+            'price' => 2999,
+            'discounted_price' => 1999,
+            'duration' => '16 Hafta',
+            'level' => 'Orta',
+            'enrolled' => 890,
+            'category' => 'Evlilik'
+        ),
+        array(
+            'title' => 'Çocuk Psikolojisi Temelleri',
+            'slug' => 'cocuk-psikolojisi-temelleri',
+            'description' => 'Çocukların zihinsel gelişimini anlayın. Yaş dönemlerine göre gelişim özellikleri, davranış problemleri ve sağlıklı gelişim için ipuçları.',
+            'price' => 1499,
+            'discounted_price' => 799,
+            'duration' => '8 Hafta',
+            'level' => 'Başlangıç',
+            'enrolled' => 2100,
+            'category' => 'Psikoloji'
+        ),
+        array(
+            'title' => 'Aile İçi İletişim Workshop',
+            'slug' => 'aile-ici-iletisim-workshop',
+            'description' => 'Aile içi iletişim problemlerini çözmek için pratik teknikler. Pasif-agresif davranışlardan sağlıklı sınırlar koymaya kadar her şey.',
+            'price' => 999,
+            'discounted_price' => 499,
+            'duration' => '4 Hafta',
+            'level' => 'Başlangıç',
+            'enrolled' => 3200,
+            'category' => 'İletişim'
+        ),
+        array(
+            'title' => 'Ergenlik Dönemi Rehberliği',
+            'slug' => 'ergenlik-donemi-rehberligi',
+            'description' => 'Ergenlik dönemindeki çocuğunuzla nasıl iletişim kuracağınızı öğrenin. Bu zorlu dönemi sağlıklı atlatmanız için uzman rehberliği.',
+            'price' => 1999,
+            'discounted_price' => 999,
+            'duration' => '10 Hafta',
+            'level' => 'Orta',
+            'enrolled' => 780,
+            'category' => 'Aile Eğitimi'
+        ),
+        array(
+            'title' => 'Ücretsiz Mini Kurs: Aileye Giriş',
+            'slug' => 'mini-kurs-aileye-giris',
+            'description' => 'Aile eğitiminin temellerini keşfedin. Ücretsiz bu giriş kursunda ailenizi daha iyi anlamak için temel kavramları öğreneceksiniz.',
+            'price' => 0,
+            'discounted_price' => 0,
+            'duration' => '1 Hafta',
+            'level' => 'Başlangıç',
+            'enrolled' => 5000,
+            'category' => 'Ücretsiz',
+            'is_free' => true
+        )
+    );
+    
+    foreach ($sample_courses as $course) {
+        // Kurs zaten var mı kontrol et
+        $existing = get_page_by_path($course['slug'], OBJECT, 'course');
+        
+        if (!$existing) {
+            $course_id = wp_insert_post(array(
+                'post_title' => $course['title'],
+                'post_name' => $course['slug'],
+                'post_content' => $course['description'],
+                'post_status' => 'publish',
+                'post_type' => 'course',
+                'post_author' => 1,
+            ));
+            
+            if ($course_id && !is_wp_error($course_id)) {
+                // Kurs meta verilerini kaydet
+                update_post_meta($course_id, '_course_price', $course['price']);
+                update_post_meta($course_id, '_course_discounted_price', $course['discounted_price']);
+                update_post_meta($course_id, '_course_duration', $course['duration']);
+                update_post_meta($course_id, '_course_level', strtolower($course['level']));
+                update_post_meta($course_id, '_course_enrolled', $course['enrolled']);
+                update_post_meta($course_id, '_course_is_free', isset($course['is_free']) ? '1' : '0');
+                
+                // Kategori ekle
+                if (!empty($course['category'])) {
+                    wp_set_object_terms($course_id, $course['category'], 'course_category');
+                }
+            }
+        }
+    }
+    
+    update_option('metabilinc_sample_courses_created', true);
+}
+
+// Örnek kurs kategorilerini oluştur
+function metabilinc_create_sample_categories() {
+    $categories = array(
+        'Aile Eğitimi' => 'aile-egitimi',
+        'Evlilik' => 'evlilik',
+        'Psikoloji' => 'psikoloji',
+        'İletişim' => 'iletisim',
+        'Ücretsiz' => 'ucretsiz'
+    );
+    
+    foreach ($categories as $name => $slug) {
+        if (!term_exists($slug, 'course_category')) {
+            wp_insert_term($name, 'course_category', array(
+                'slug' => $slug
+            ));
+        }
+    }
+}
+add_action('init', 'metabilinc_create_sample_categories');
