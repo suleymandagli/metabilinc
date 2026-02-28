@@ -513,6 +513,171 @@ function metabilinc_create_gift_handler() {
 add_action('wp_ajax_metabilinc_create_gift', 'metabilinc_create_gift_handler');
 add_action('wp_ajax_nopriv_metabilinc_create_gift', 'metabilinc_create_gift_handler');
 
+// İletişim Formu AJAX Handler
+function metabilinc_contact_form_handler() {
+    //Nonce kontrolü
+    if (!check_ajax_referer('metabilinc_nonce', 'nonce', false)) {
+        wp_send_json_error(array('message' => 'Güvenlik doğrulaması başarısız.'));
+    }
+    
+    $name = sanitize_text_field($_POST['name'] ?? '');
+    $email = sanitize_email($_POST['email'] ?? '');
+    $subject = sanitize_text_field($_POST['subject'] ?? '');
+    $message = sanitize_textarea_field($_POST['message'] ?? '');
+    
+    // Zorunlu alan kontrolü
+    if (empty($name) || empty($email) || empty($message)) {
+        wp_send_json_error(array('message' => 'Lütfen tüm zorunlu alanları doldurun.'));
+    }
+    
+    if (!is_email($email)) {
+        wp_send_json_error(array('message' => 'Geçerli bir e-posta adresi girin.'));
+    }
+    
+    // E-posta gönderimi
+    $to = get_option('admin_email');
+    $headers = array(
+        'Content-Type: text/html; charset=UTF-8',
+        'From: ' . get_bloginfo('name') . ' <' . $to . '>',
+        'Reply-To: ' . $name . ' <' . $email . '>'
+    );
+    
+    $email_subject = $subject ? $subject : 'Yeni İletişim Formu Mesajı';
+    $email_body = "
+        <h2>Yeni İletişim Formu Mesajı</h2>
+        <p><strong>Ad:</strong> {$name}</p>
+        <p><strong>E-posta:</strong> {$email}</p>
+        <p><strong>Konu:</strong> {$subject}</p>
+        <p><strong>Mesaj:</strong></p>
+        <p>{$message}</p>
+    ";
+    
+    $mail_sent = wp_mail($to, $email_subject, $email_body, $headers);
+    
+    if ($mail_sent) {
+        // Veritabanına kaydet (opsiyonel)
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'metabilinc_contacts';
+        
+        // Tablo yoksa oluştur
+        if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+            $charset_collate = $wpdb->get_charset_collate();
+            $sql = "CREATE TABLE $table_name (
+                id bigint(20) NOT NULL AUTO_INCREMENT,
+                name varchar(255) NOT NULL,
+                email varchar(255) NOT NULL,
+                subject varchar(255),
+                message text,
+                status varchar(20) DEFAULT 'unread',
+                created_at datetime DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY  (id)
+            ) $charset_collate;";
+            
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            dbDelta($sql);
+        }
+        
+        $wpdb->insert(
+            $table_name,
+            array(
+                'name' => $name,
+                'email' => $email,
+                'subject' => $subject,
+                'message' => $message,
+                'created_at' => current_time('mysql'),
+            ),
+            array('%s', '%s', '%s', '%s', '%s')
+        );
+        
+        wp_send_json_success(array('message' => 'Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapacağız.'));
+    } else {
+        wp_send_json_error(array('message' => 'Mesaj gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.'));
+    }
+    
+    wp_die();
+}
+add_action('wp_ajax_metabilinc_contact_form', 'metabilinc_contact_form_handler');
+add_action('wp_ajax_nopriv_metabilinc_contact_form', 'metabilinc_contact_form_handler');
+
+// Kurs Filtreleme AJAX Handler
+function metabilinc_filter_courses_handler() {
+    //Nonce kontrolü
+    if (!check_ajax_referer('metabilinc_nonce', 'nonce', false)) {
+        wp_send_json_error(array('message' => 'Güvenlik doğrulaması başarısız.'));
+    }
+    
+    $category = sanitize_text_field($_POST['category'] ?? '');
+    $level = sanitize_text_field($_POST['level'] ?? '');
+    $price = sanitize_text_field($_POST['price'] ?? '');
+    
+    $args = array(
+        'post_type' => 'course',
+        'post_status' => 'publish',
+        'posts_per_page' => -1,
+    );
+    
+    // Meta query oluştur
+    $meta_query = array('relation' => 'AND');
+    
+    if ($level) {
+        $meta_query[] = array(
+            'key' => '_course_level',
+            'value' => $level,
+            'compare' => '='
+        );
+    }
+    
+    if ($price === 'free') {
+        $meta_query[] = array(
+            'key' => '_course_is_free',
+            'value' => '1',
+            'compare' => '='
+        );
+    } elseif ($price === 'paid') {
+        $meta_query[] = array(
+            'key' => '_course_is_free',
+            'value' => '0',
+            'compare' => '='
+        );
+    }
+    
+    if (count($meta_query) > 1) {
+        $args['meta_query'] = $meta_query;
+    }
+    
+    // Kategori filtreleme
+    if ($category) {
+        $args['tax_query'] = array(
+            array(
+                'taxonomy' => 'course_category',
+                'field' => 'slug',
+                'terms' => $category
+            )
+        );
+    }
+    
+    $query = new WP_Query($args);
+    
+    ob_start();
+    
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            get_template_part('template-parts/content', 'course-card');
+        }
+        wp_reset_postdata();
+    } else {
+        echo '<p class="no-courses">Hiç kurs bulunamadı.</p>';
+    }
+    
+    $html = ob_get_clean();
+    
+    wp_send_json_success(array('html' => $html));
+    wp_die();
+}
+add_action('wp_ajax_metabilinc_filter_courses', 'metabilinc_filter_courses_handler');
+add_action('wp_ajax_nopriv_metabilinc_filter_courses', 'metabilinc_filter_courses_handler');
+
 // Hediye erişim kontrolü
 function metabilinc_check_gift_access() {
     if (isset($_GET['gift']) && isset($_GET['to'])) {

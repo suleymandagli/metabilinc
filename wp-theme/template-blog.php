@@ -24,7 +24,61 @@ get_header();
     <div class="container">
         <div class="blog-grid">
             <?php
-            // Blog yazıları (varsayılan veriler - WordPress veritabanından çekilebilir)
+            // WordPress yazılarını çek
+            $blog_args = array(
+                'post_type' => 'post',
+                'post_status' => 'publish',
+                'posts_per_page' => 12,
+                'orderby' => 'date',
+                'order' => 'DESC'
+            );
+            $blog_query = new WP_Query($blog_args);
+            
+            if ($blog_query->have_posts()) :
+                while ($blog_query->have_posts()) : $blog_query->the_post();
+                    $categories = get_the_category();
+                    $category_name = !empty($categories) ? $categories[0]->name : 'Blog';
+                    $read_time = ceil(get_post_read_time(get_the_ID()) / 60);
+                    if ($read_time < 1) $read_time = 1;
+            ?>
+                <article class="blog-card">
+                    <?php if (has_post_thumbnail()) : ?>
+                        <div class="blog-card-image">
+                            <?php the_post_thumbnail('medium_large', array('alt' => get_the_title())); ?>
+                        </div>
+                    <?php else : ?>
+                        <div class="blog-card-image">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                            </svg>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="blog-card-content">
+                        <div class="blog-card-meta">
+                            <span class="blog-card-category"><?php echo esc_html($category_name); ?></span>
+                            <span class="blog-card-readtime"><?php echo $read_time; ?> dk okuma</span>
+                        </div>
+                        <h2 class="blog-card-title">
+                            <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                        </h2>
+                        <p class="blog-card-excerpt"><?php echo wp_trim_words(get_the_excerpt(), 20, '...'); ?></p>
+                        <div class="blog-card-date">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            <?php echo get_the_date('d F Y'); ?>
+                        </div>
+                    </div>
+                </article>
+            <?php 
+                endwhile;
+                wp_reset_postdata();
+            else :
+            // WordPress yazısı yoksa varsayılan verileri göster
             $blog_posts = array(
                 array(
                     'slug' => "cocuklarda-ogrenme-motivasyonu",
@@ -79,14 +133,12 @@ get_header();
             foreach ($blog_posts as $post) :
             ?>
                 <article class="blog-card">
-                    <!-- Image Placeholder -->
                     <div class="blog-card-image">
                         <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
                         </svg>
                     </div>
 
-                    <!-- Content -->
                     <div class="blog-card-content">
                         <div class="blog-card-meta">
                             <span class="blog-card-category"><?php echo $post['category']; ?></span>
@@ -108,6 +160,7 @@ get_header();
                     </div>
                 </article>
             <?php endforeach; ?>
+            <?php endif; ?>
         </div>
 
         <!-- Newsletter CTA -->

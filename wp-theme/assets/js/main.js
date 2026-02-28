@@ -19,7 +19,15 @@
             this.stickyHeader();
             this.leadCaptureForm();
             this.giftForm();
+            this.contactForm();
+            this.courseFilters();
+            this.faqAccordion();
             this.scrollAnimations();
+        },
+        
+        // Benzersiz hediye token oluştur
+        generateGiftToken: function() {
+            return 'gift_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 9);
         },
         
         // Mobil Menü
@@ -117,44 +125,179 @@
                 form.on('submit', function(e) {
                     e.preventDefault();
                     
+                    var submitBtn = form.find('button[type="submit"]');
+                    var originalText = submitBtn.html();
+                    submitBtn.prop('disabled', true).html('<span class="loading-spinner"></span> Yükleniyor...');
+                    
+                    var courseSlug = window.location.pathname.split('/').filter(Boolean).pop();
+                    var giftToken = this.generateGiftToken();
+                    
                     var formData = {
                         action: 'metabilinc_create_gift',
                         nonce: metabilincData.nonce,
                         course_id: form.find('input[name="course_id"]').val() || 0,
+                        course_slug: courseSlug,
+                        gift_token: giftToken,
                         gift_name: form.find('input[name="gift_name"]').val(),
                         gift_email: form.find('input[name="gift_email"]').val(),
                         gift_message: form.find('textarea[name="gift_message"]').val()
                     };
                     
-                    // AJAX isteği yerine doğrudan bağlantı oluştur
-                    var courseSlug = window.location.pathname.split('/').filter(Boolean).pop();
-                    var giftToken = this.generateGiftToken();
-                    var giftLink = window.location.origin + '/kurs/' + courseSlug + '?gift=' + giftToken + '&to=' + encodeURIComponent(formData.gift_email);
-                    
-                    // Bağlantıyı göster
-                    $('#gift-result').show();
-                    $('#gift-link').val(giftLink);
-                    
-                    // Bağlantıyı localStorage'a kaydet (gerçek uygulamada sunucuya kaydedilmeli)
-                    var gifts = JSON.parse(localStorage.getItem('metabilinc_gifts') || '[]');
-                    gifts.push({
-                        token: giftToken,
-                        course_slug: courseSlug,
-                        recipient_email: formData.gift_email,
-                        recipient_name: formData.gift_name,
-                        message: formData.gift_message,
-                        created_at: new Date().toISOString()
+                    $.ajax({
+                        url: metabilincData.ajaxUrl,
+                        type: 'POST',
+                        data: formData,
+                        success: function(response) {
+                            if (response.success) {
+                                var giftLink = window.location.origin + '/kurs/' + courseSlug + '?gift=' + giftToken + '&to=' + encodeURIComponent(formData.gift_email);
+                                
+                                $('#gift-result').show();
+                                $('#gift-link').val(giftLink);
+                                form.hide();
+                            } else {
+                                alert(response.data.message || 'Hediye oluşturulurken bir hata oluştu.');
+                                submitBtn.prop('disabled', false).html(originalText);
+                            }
+                        },
+                        error: function() {
+                            alert('Sunucu hatası oluştu. Lütfen tekrar deneyin.');
+                            submitBtn.prop('disabled', false).html(originalText);
+                        }
                     });
-                    localStorage.setItem('metabilinc_gifts', JSON.stringify(gifts));
-                    
-                    form.hide();
                 }.bind(this));
             }
         },
         
-        // Benzersiz hediye token oluştur
-        generateGiftToken: function() {
-            return 'gift_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 9);
+        // İletişim Form
+        contactForm: function() {
+            var form = $('#contact-form, .contact-form');
+            
+            if (form.length) {
+                form.on('submit', function(e) {
+                    e.preventDefault();
+                    
+                    var submitBtn = form.find('button[type="submit"]');
+                    var originalText = submitBtn.html();
+                    submitBtn.prop('disabled', true).html('<span class="loading-spinner"></span> Yükleniyor...');
+                    
+                    var formData = {
+                        action: 'metabilinc_contact_form',
+                        nonce: metabilincData.nonce,
+                        name: form.find('input[name="name"]').val() || form.find('input[name="your-name"]').val(),
+                        email: form.find('input[name="email"]').val() || form.find('input[name="your-email"]').val(),
+                        subject: form.find('input[name="subject"]').val() || form.find('input[name="your-subject"]').val(),
+                        message: form.find('textarea[name="message"]').val() || form.find('textarea[name="your-message"]').val()
+                    };
+                    
+                    $.ajax({
+                        url: metabilincData.ajaxUrl,
+                        type: 'POST',
+                        data: formData,
+                        success: function(response) {
+                            if (response.success) {
+                                form.html('<div class="alert alert-success"><p>' + response.data.message + '</p></div>');
+                            } else {
+                                form.find('.form-messages').html('<p class="error" style="color: red;">' + (response.data.message || 'Bir hata oluştu.') + '</p>');
+                                submitBtn.prop('disabled', false).html(originalText);
+                            }
+                        },
+                        error: function() {
+                            form.find('.form-messages').html('<p class="error" style="color: red;">Sunucu hatası oluştu. Lütfen tekrar deneyin.</p>');
+                            submitBtn.prop('disabled', false).html(originalText);
+                        }
+                    });
+                });
+            }
+        },
+        
+        // Kurs Filtreleme
+        courseFilters: function() {
+            var filterForm = $('.course-filter-form, #course-filter-form');
+            var courseGrid = $('.course-grid, .courses-grid, .course-list');
+            
+            if (filterForm.length && courseGrid.length) {
+                filterForm.on('change', 'select, input', function(e) {
+                    e.preventDefault();
+                    
+                    var category = filterForm.find('select[name="category"]').val() || '';
+                    var level = filterForm.find('select[name="level"]').val() || '';
+                    var price = filterForm.find('select[name="price"]').val() || '';
+                    
+                    var filterBtn = filterForm.find('button[type="submit"]');
+                    var originalText = filterBtn.html();
+                    filterBtn.prop('disabled', true).html('<span class="loading-spinner"></span> Filtreleniyor...');
+                    
+                    var formData = {
+                        action: 'metabilinc_filter_courses',
+                        nonce: metabilincData.nonce,
+                        category: category,
+                        level: level,
+                        price: price
+                    };
+                    
+                    $.ajax({
+                        url: metabilincData.ajaxUrl,
+                        type: 'POST',
+                        data: formData,
+                        success: function(response) {
+                            if (response.success) {
+                                courseGrid.fadeOut(200, function() {
+                                    $(this).html(response.data.html).fadeIn(200);
+                                });
+                            } else {
+                                alert('Filtreleme sırasında bir hata oluştu.');
+                            }
+                            filterBtn.prop('disabled', false).html(originalText);
+                        },
+                        error: function() {
+                            alert('Sunucu hatası oluştu.');
+                            filterBtn.prop('disabled', false).html(originalText);
+                        }
+                    });
+                });
+                
+                // Reset button
+                filterForm.on('click', '.filter-reset', function(e) {
+                    e.preventDefault();
+                    filterForm.find('select').val('');
+                    filterForm.find('input').val('');
+                    courseGrid.fadeOut(200, function() {
+                        $(this).load(window.location.href + ' ' + courseGrid.selector, function() {
+                            $(this).fadeIn(200);
+                        });
+                    });
+                });
+            }
+        },
+        
+        // SSS Akordiyon
+        faqAccordion: function() {
+            var faqItems = $('.faq-item, .accordion-item');
+            
+            if (faqItems.length) {
+                faqItems.each(function() {
+                    var question = $(this).find('.faq-question, .accordion-question, .faq-header');
+                    var answer = $(this).find('.faq-answer, .accordion-content, .faq-response');
+                    
+                    if (question.length && answer.length) {
+                        question.on('click', function(e) {
+                            e.preventDefault();
+                            
+                            var isActive = $(this).parent().hasClass('active');
+                            
+                            // Tümünü kapat
+                            faqItems.removeClass('active');
+                            faqItems.find('.faq-answer, .accordion-content, .faq-response').slideUp(300);
+                            
+                            // Tıklananı aç
+                            if (!isActive) {
+                                $(this).parent().addClass('active');
+                                answer.slideDown(300);
+                            }
+                        });
+                    }
+                });
+            }
         },
         
         // Scroll Animations
