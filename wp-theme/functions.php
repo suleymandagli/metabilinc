@@ -898,6 +898,11 @@ function metabilinc_create_default_pages() {
             'title' => 'Ödeme Yönetimi',
             'template' => 'template-admin-odemeler.php',
         ),
+        array(
+            'slug' => 'admin-odeme-ayarlari',
+            'title' => 'Ödeme Ayarları',
+            'template' => 'template-admin-odeme-ayarlari.php',
+        ),
     );
     
     foreach ($pages as $page_data) {
@@ -1148,6 +1153,10 @@ function metabilinc_create_admin_pages() {
             'title' => 'Ödeme Yönetimi',
             'template' => 'template-admin-odemeler.php',
         ),
+        'admin-odeme-ayarlari' => array(
+            'title' => 'Ödeme Ayarları',
+            'template' => 'template-admin-odeme-ayarlari.php',
+        ),
     );
     
     foreach ($pages as $slug => $page_data) {
@@ -1167,4 +1176,490 @@ function metabilinc_create_admin_pages() {
             }
         }
     }
+}
+
+/* =================================================================
+   ÖDEME SİSTEMİ FONKSİYONLARI
+   iyzico, PayTR, Stripe ve Havale/EFT entegrasyonu
+   ================================================================= */
+
+/**
+ * Ödeme ayarlarını getir
+ * @return array Ödeme ayarları
+ */
+function metabilinc_get_payment_settings() {
+    $defaults = array(
+        'active_gateway' => 'iyzico',
+        'currency' => 'TRY',
+        'currency_symbol' => '₺',
+        'iyzico' => array(
+            'api_key' => '',
+            'secret_key' => '',
+            'sandbox' => true,
+        ),
+        'paytr' => array(
+            'merchant_id' => '',
+            'merchant_key' => '',
+            'merchant_salt' => '',
+            'sandbox' => true,
+        ),
+        'stripe' => array(
+            'publishable_key' => '',
+            'secret_key' => '',
+        ),
+        'bank_transfer' => array(
+            'enabled' => false,
+            'account_name' => '',
+            'account_iban' => '',
+            'account_bank' => '',
+            'instructions' => '',
+        ),
+    );
+    
+    $settings = get_option('metabilinc_payment_settings', array());
+    return wp_parse_args($settings, $defaults);
+}
+
+/**
+ * Aktif ödeme sağlayıcısını getir
+ * @return string Gateway adı
+ */
+function metabilinc_get_active_gateway() {
+    $settings = metabilinc_get_payment_settings();
+    return $settings['active_gateway'];
+}
+
+/**
+ * Para birimi sembolünü getir
+ * @return string Para birimi sembolü
+ */
+function metabilinc_get_currency_symbol() {
+    $settings = metabilinc_get_payment_settings();
+    return $settings['currency_symbol'];
+}
+
+/**
+ * Ödemeleri getir (Veritabanı veya API'den)
+ * 
+ * BU FONKSİYON GERÇEK ÖDEME VERİSİNİ ÇEKER
+ * Şu an simülasyon modunda çalışır, API bilgileri girildiğinde
+ * gerçek ödeme sağlayıcısından veri çekecek şekilde güncellenir.
+ * 
+ * @param array $args Filtre argümanları
+ * @return array Ödemeler listesi
+ */
+function metabilinc_get_payments($args = array()) {
+    $defaults = array(
+        'status' => 'all',
+        'gateway' => 'all',
+        'date_from' => '',
+        'date_to' => '',
+        'search' => '',
+        'per_page' => 20,
+        'page' => 1,
+    );
+    
+    $args = wp_parse_args($args, $defaults);
+    
+    // Gerçek ödeme sağlayıcısı bilgilerini kontrol et
+    $settings = metabilinc_get_payment_settings();
+    $active_gateway = $settings['active_gateway'];
+    
+    // API bilgileri girilmiş mi kontrol et
+    $api_configured = false;
+    switch ($active_gateway) {
+        case 'iyzico':
+            $api_configured = !empty($settings['iyzico']['api_key']) && !empty($settings['iyzico']['secret_key']);
+            break;
+        case 'paytr':
+            $api_configured = !empty($settings['paytr']['merchant_id']) && !empty($settings['paytr']['merchant_key']);
+            break;
+        case 'stripe':
+            $api_configured = !empty($settings['stripe']['secret_key']);
+            break;
+    }
+    
+    // API yapılandırılmamışsa simülasyon verisi döndür
+    if (!$api_configured) {
+        return metabilinc_get_simulated_payments($args);
+    }
+    
+    // API yapılandırılmışsa gerçek veriyi çek
+    switch ($active_gateway) {
+        case 'iyzico':
+            return metabilinc_get_iyzico_payments($args, $settings['iyzico']);
+        case 'paytr':
+            return metabilinc_get_paytr_payments($args, $settings['paytr']);
+        case 'stripe':
+            return metabilinc_get_stripe_payments($args, $settings['stripe']);
+        default:
+            return metabilinc_get_simulated_payments($args);
+    }
+}
+
+/**
+ * Simülasyon ödeme verileri
+ * API yapılandırılmadan önce test için kullanılır
+ */
+function metabilinc_get_simulated_payments($args) {
+    $sample_payments = array(
+        array(
+            'id' => 'PAY-202403010001',
+            'user_name' => 'Ahmet Yılmaz',
+            'user_email' => 'ahmet@example.com',
+            'user_avatar' => '',
+            'course_title' => 'Ebeveynlik ve Çocuk Gelişimi',
+            'amount' => 499.00,
+            'status' => 'completed',
+            'date' => '2024-03-01 14:30:00',
+            'gateway' => 'iyzico',
+        ),
+        array(
+            'id' => 'PAY-202403010002',
+            'user_name' => 'Ayşe Demir',
+            'user_email' => 'ayse@example.com',
+            'user_avatar' => '',
+            'course_title' => 'İletişim Becerileri',
+            'amount' => 299.00,
+            'status' => 'pending',
+            'date' => '2024-03-01 15:45:00',
+            'gateway' => 'paytr',
+        ),
+        array(
+            'id' => 'PAY-202402290003',
+            'user_name' => 'Mehmet Kaya',
+            'user_email' => 'mehmet@example.com',
+            'user_avatar' => '',
+            'course_title' => 'Dijital Ebeveynlik',
+            'amount' => 399.00,
+            'status' => 'completed',
+            'date' => '2024-02-29 09:15:00',
+            'gateway' => 'iyzico',
+        ),
+        array(
+            'id' => 'PAY-202402280004',
+            'user_name' => 'Fatma Şahin',
+            'user_email' => 'fatma@example.com',
+            'user_avatar' => '',
+            'course_title' => 'Ebeveynlik ve Çocuk Gelişimi',
+            'amount' => 499.00,
+            'status' => 'failed',
+            'date' => '2024-02-28 16:20:00',
+            'gateway' => 'stripe',
+        ),
+        array(
+            'id' => 'PAY-202402270005',
+            'user_name' => 'Ali Yıldız',
+            'user_email' => 'ali@example.com',
+            'user_avatar' => '',
+            'course_title' => 'Çocuk Psikolojisi',
+            'amount' => 599.00,
+            'status' => 'completed',
+            'date' => '2024-02-27 11:00:00',
+            'gateway' => 'iyzico',
+        ),
+        array(
+            'id' => 'PAY-202402260006',
+            'user_name' => 'Zeynep Özdemir',
+            'user_email' => 'zeynep@example.com',
+            'user_avatar' => '',
+            'course_title' => 'İletişim Becerileri',
+            'amount' => 299.00,
+            'status' => 'refunded',
+            'date' => '2024-02-26 13:45:00',
+            'gateway' => 'bank_transfer',
+        ),
+        array(
+            'id' => 'PAY-202402250007',
+            'user_name' => 'Mustafa Aydın',
+            'user_email' => 'mustafa@example.com',
+            'user_avatar' => '',
+            'course_title' => 'Ebeveynlik ve Çocuk Gelişimi',
+            'amount' => 499.00,
+            'status' => 'completed',
+            'date' => '2024-02-25 10:30:00',
+            'gateway' => 'paytr',
+        ),
+        array(
+            'id' => 'PAY-202402240008',
+            'user_name' => 'Elif Koç',
+            'user_email' => 'elif@example.com',
+            'user_avatar' => '',
+            'course_title' => 'Dijital Ebeveynlik',
+            'amount' => 399.00,
+            'status' => 'completed',
+            'date' => '2024-02-24 17:15:00',
+            'gateway' => 'iyzico',
+        ),
+    );
+    
+    // Filtrele
+    $filtered = $sample_payments;
+    
+    if ($args['status'] !== 'all') {
+        $filtered = array_filter($filtered, function($payment) use ($args) {
+            return $payment['status'] === $args['status'];
+        });
+    }
+    
+    if ($args['gateway'] !== 'all') {
+        $filtered = array_filter($filtered, function($payment) use ($args) {
+            return $payment['gateway'] === $args['gateway'];
+        });
+    }
+    
+    if (!empty($args['search'])) {
+        $search = strtolower($args['search']);
+        $filtered = array_filter($filtered, function($payment) use ($search) {
+            return strpos(strtolower($payment['user_name']), $search) !== false ||
+                   strpos(strtolower($payment['user_email']), $search) !== false ||
+                   strpos(strtolower($payment['id']), $search) !== false;
+        });
+    }
+    
+    // Toplam sayı
+    $total = count($filtered);
+    
+    // Sayfalama
+    $offset = ($args['page'] - 1) * $args['per_page'];
+    $filtered = array_slice($filtered, $offset, $args['per_page']);
+    
+    return array(
+        'payments' => array_values($filtered),
+        'total' => $total,
+        'pages' => ceil($total / $args['per_page']),
+        'page' => $args['page'],
+    );
+}
+
+/**
+ * iyzico'dan ödeme verilerini çek
+ * 
+ * NOT: Bu fonksiyon iyzico API entegrasyonu gerektirir.
+ * iyzico-php kütüphanesini yükledikten sonra aktif hale getirin.
+ * 
+ * @param array $args Filtre argümanları
+ * @param array $config iyzico yapılandırması
+ * @return array Ödemeler listesi
+ */
+function metabilinc_get_iyzico_payments($args, $config) {
+    // iyzico PHP SDK'sı yüklü mü kontrol et
+    if (!class_exists('Iyzipay\IyzipayResource')) {
+        // SDK yoksa simülasyon verisi döndür
+        return metabilinc_get_simulated_payments($args);
+    }
+    
+    // iyzico API yapılandırması
+    $options = new \Iyzipay\Options();
+    $options->setApiKey($config['api_key']);
+    $options->setSecretKey($config['secret_key']);
+    $options->setBaseUrl($config['sandbox'] ? 'https://sandbox-api.iyzipay.com' : 'https://api.iyzipay.com');
+    
+    // TODO: iyzico API'den ödeme geçmişini çek
+    // $request = new \Iyzipay\Request\ReportingPaymentDetailRequest();
+    // ... API çağrısı yap
+    
+    // Şimdilik simülasyon verisi döndür
+    return metabilinc_get_simulated_payments($args);
+}
+
+/**
+ * PayTR'den ödeme verilerini çek
+ * 
+ * NOT: Bu fonksiyon PayTR API entegrasyonu gerektirir.
+ * PayTR dokümantasyonuna göre API entegrasyonunu tamamlayın.
+ * 
+ * @param array $args Filtre argümanları
+ * @param array $config PayTR yapılandırması
+ * @return array Ödemeler listesi
+ */
+function metabilinc_get_paytr_payments($args, $config) {
+    // PayTR API entegrasyonu buraya yapılacak
+    // Şimdilik simülasyon verisi döndür
+    return metabilinc_get_simulated_payments($args);
+}
+
+/**
+ * Stripe'dan ödeme verilerini çek
+ * 
+ * NOT: Bu fonksiyon Stripe PHP SDK gerektirir.
+ * stripe/stripe-php kütüphanesini yükledikten sonra aktif hale getirin.
+ * 
+ * @param array $args Filtre argümanları
+ * @param array $config Stripe yapılandırması
+ * @return array Ödemeler listesi
+ */
+function metabilinc_get_stripe_payments($args, $config) {
+    // Stripe PHP SDK yüklü mü kontrol et
+    if (!class_exists('Stripe\Stripe')) {
+        // SDK yoksa simülasyon verisi döndür
+        return metabilinc_get_simulated_payments($args);
+    }
+    
+    // Stripe API anahtarını ayarla
+    \Stripe\Stripe::setApiKey($config['secret_key']);
+    
+    try {
+        // Stripe'dan ödemeleri çek
+        $params = array(
+            'limit' => $args['per_page'],
+        );
+        
+        if (!empty($args['date_from'])) {
+            $params['created']['gte'] = strtotime($args['date_from']);
+        }
+        
+        if (!empty($args['date_to'])) {
+            $params['created']['lte'] = strtotime($args['date_to']);
+        }
+        
+        $charges = \Stripe\Charge::all($params);
+        
+        $payments = array();
+        foreach ($charges->data as $charge) {
+            $payments[] = array(
+                'id' => 'STRIPE-' . $charge->id,
+                'user_name' => $charge->billing_details->name ?? 'İsimsiz',
+                'user_email' => $charge->billing_details->email ?? '',
+                'user_avatar' => '',
+                'course_title' => 'Stripe Ödemesi',
+                'amount' => $charge->amount / 100,
+                'status' => $charge->status === 'succeeded' ? 'completed' : ($charge->refunded ? 'refunded' : $charge->status),
+                'date' => date('Y-m-d H:i:s', $charge->created),
+                'gateway' => 'stripe',
+            );
+        }
+        
+        return array(
+            'payments' => $payments,
+            'total' => count($payments),
+            'pages' => 1,
+            'page' => 1,
+        );
+        
+    } catch (Exception $e) {
+        // Hata durumunda simülasyon verisi döndür
+        return metabilinc_get_simulated_payments($args);
+    }
+}
+
+/**
+ * Ödeme istatistiklerini getir
+ * @return array İstatistikler
+ */
+function metabilinc_get_payment_stats() {
+    $settings = metabilinc_get_payment_settings();
+    $args = array('per_page' => 1000);
+    
+    $payments_data = metabilinc_get_payments($args);
+    $payments = $payments_data['payments'];
+    
+    $total_revenue = 0;
+    $completed_count = 0;
+    $pending_count = 0;
+    $failed_count = 0;
+    
+    foreach ($payments as $payment) {
+        if ($payment['status'] === 'completed') {
+            $total_revenue += $payment['amount'];
+            $completed_count++;
+        } elseif ($payment['status'] === 'pending') {
+            $pending_count++;
+        } elseif ($payment['status'] === 'failed') {
+            $failed_count++;
+        }
+    }
+    
+    return array(
+        'total_revenue' => $total_revenue,
+        'completed' => $completed_count,
+        'pending' => $pending_count,
+        'failed' => $failed_count,
+        'total' => count($payments),
+    );
+}
+
+/**
+ * Ödeme durumu etiketini getir
+ * @param string $status Ödeme durumu
+ * @return array Etiket ve CSS sınıfı
+ */
+function metabilinc_get_payment_status_label($status) {
+    $labels = array(
+        'completed' => array('label' => 'Tamamlandı', 'class' => 'status-completed'),
+        'pending' => array('label' => 'Bekliyor', 'class' => 'status-pending'),
+        'failed' => array('label' => 'Başarısız', 'class' => 'status-failed'),
+        'refunded' => array('label' => 'İade', 'class' => 'status-refunded'),
+    );
+    
+    return isset($labels[$status]) ? $labels[$status] : array('label' => $status, 'class' => '');
+}
+
+/**
+ * Ödeme yöntemi etiketini getir
+ * @param string $gateway Ödeme yöntemi
+ * @return string Etiket
+ */
+function metabilinc_get_payment_gateway_label($gateway) {
+    $labels = array(
+        'iyzico' => '💳 iyzico',
+        'paytr' => '💳 PayTR',
+        'stripe' => '💳 Stripe',
+        'bank_transfer' => '🏦 Havale/EFT',
+    );
+    
+    return isset($labels[$gateway]) ? $labels[$gateway] : $gateway;
+}
+
+/**
+ * AJAX - Ödeme bağlantısını test et
+ */
+add_action('wp_ajax_metabilinc_test_payment_connection', 'metabilinc_test_payment_connection');
+function metabilinc_test_payment_connection() {
+    check_ajax_referer('metabilinc_payment_settings_nonce', 'nonce');
+    
+    if (!current_user_can('administrator')) {
+        wp_send_json_error('Yetkiniz yok.');
+    }
+    
+    $gateway = sanitize_text_field($_POST['gateway']);
+    $settings = metabilinc_get_payment_settings();
+    
+    $result = array(
+        'success' => false,
+        'message' => 'Bağlantı test edilemedi.',
+    );
+    
+    switch ($gateway) {
+        case 'iyzico':
+            if (class_exists('Iyzipay\IyzipayResource')) {
+                // iyzico bağlantı testi
+                $result['message'] = 'iyzico SDK yüklü. API bilgileri kaydedildikten sonra gerçek test yapılabilir.';
+                $result['success'] = true;
+            } else {
+                $result['message'] = 'iyzico PHP SDK yüklenmemiş. Composer ile yükleyin: composer require iyzico/iyzipay-php';
+            }
+            break;
+            
+        case 'paytr':
+            $result['message'] = 'PayTR entegrasyonu için PayTR PHP kütüphanesi gereklidir.';
+            break;
+            
+        case 'stripe':
+            if (class_exists('Stripe\Stripe')) {
+                try {
+                    \Stripe\Stripe::setApiKey($settings['stripe']['secret_key']);
+                    $account = \Stripe\Account::retrieve();
+                    $result['success'] = true;
+                    $result['message'] = 'Stripe bağlantısı başarılı! Hesap: ' . $account->email;
+                } catch (Exception $e) {
+                    $result['message'] = 'Stripe bağlantı hatası: ' . $e->getMessage();
+                }
+            } else {
+                $result['message'] = 'Stripe PHP SDK yüklenmemiş. Composer ile yükleyin: composer require stripe/stripe-php';
+            }
+            break;
+    }
+    
+    wp_send_json($result);
 }

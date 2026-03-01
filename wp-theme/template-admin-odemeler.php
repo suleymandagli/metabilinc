@@ -16,115 +16,60 @@ if (!in_array('administrator', $current_user->roles) && !in_array('editor', $cur
     exit;
 }
 
-// Ödeme verilerini simüle et (gerçek ödeme sistemi entegre edildiğinde burası güncellenecek)
-$payments = array(
-    array(
-        'id' => 'PAY-2024-001',
-        'user_name' => 'Ayşe Yılmaz',
-        'user_email' => 'ayse@example.com',
-        'course' => 'Bilinçli Evlilik Akademisi',
-        'amount' => 1299.00,
-        'status' => 'completed',
-        'date' => '2024-03-15 14:30:00',
-        'method' => 'Kredi Kartı'
-    ),
-    array(
-        'id' => 'PAY-2024-002',
-        'user_name' => 'Mehmet Demir',
-        'user_email' => 'mehmet@example.com',
-        'course' => 'Mini Kurs: Ebeveynlik Temelleri',
-        'amount' => 0.00,
-        'status' => 'completed',
-        'date' => '2024-03-15 10:15:00',
-        'method' => 'Ücretsiz'
-    ),
-    array(
-        'id' => 'PAY-2024-003',
-        'user_name' => 'Zeynep Kaya',
-        'user_email' => 'zeynep@example.com',
-        'course' => 'Bilinçli Ebeveynlik Okulu',
-        'amount' => 999.00,
-        'status' => 'pending',
-        'date' => '2024-03-14 16:45:00',
-        'method' => 'Havale'
-    ),
-    array(
-        'id' => 'PAY-2024-004',
-        'user_name' => 'Ali Yıldız',
-        'user_email' => 'ali@example.com',
-        'course' => 'Bilinçli Evlilik Akademisi',
-        'amount' => 1299.00,
-        'status' => 'completed',
-        'date' => '2024-03-14 09:20:00',
-        'method' => 'Kredi Kartı'
-    ),
-    array(
-        'id' => 'PAY-2024-005',
-        'user_name' => 'Fatma Şahin',
-        'user_email' => 'fatma@example.com',
-        'course' => 'Aile İçi İletişim Kursu',
-        'amount' => 799.00,
-        'status' => 'failed',
-        'date' => '2024-03-13 11:00:00',
-        'method' => 'Kredi Kartı'
-    ),
-    array(
-        'id' => 'PAY-2024-006',
-        'user_name' => 'Can Özdemir',
-        'user_email' => 'can@example.com',
-        'course' => 'Bilinçli Ebeveynlik Okulu',
-        'amount' => 999.00,
-        'status' => 'refunded',
-        'date' => '2024-03-12 15:30:00',
-        'method' => 'Kredi Kartı'
-    ),
-    array(
-        'id' => 'PAY-2024-007',
-        'user_name' => 'Elif Aydın',
-        'user_email' => 'elif@example.com',
-        'course' => 'Mini Kurs: Ebeveynlik Temelleri',
-        'amount' => 0.00,
-        'status' => 'completed',
-        'date' => '2024-03-12 08:45:00',
-        'method' => 'Ücretsiz'
-    ),
-    array(
-        'id' => 'PAY-2024-008',
-        'user_name' => 'Burak Yılmaz',
-        'user_email' => 'burak@example.com',
-        'course' => 'Bilinçli Evlilik Akademisi',
-        'amount' => 1299.00,
-        'status' => 'pending',
-        'date' => '2024-03-11 17:20:00',
-        'method' => 'Havale'
-    ),
+// Filtre parametrelerini al
+$filter_status = isset($_GET['status']) ? sanitize_text_field($_GET['status']) : 'all';
+$filter_gateway = isset($_GET['gateway']) ? sanitize_text_field($_GET['gateway']) : 'all';
+$filter_search = isset($_GET['search']) ? sanitize_text_field($_GET['search']) : '';
+$filter_date_from = isset($_GET['date_from']) ? sanitize_text_field($_GET['date_from']) : '';
+$filter_date_to = isset($_GET['date_to']) ? sanitize_text_field($_GET['date_to']) : '';
+$current_page = isset($_GET['paged']) ? max(1, intval($_GET['paged'])) : 1;
+
+// Ödeme verilerini getir (YENİ: Gerçek fonksiyon kullanılıyor)
+$payment_args = array(
+    'status' => $filter_status,
+    'gateway' => $filter_gateway,
+    'search' => $filter_search,
+    'date_from' => $filter_date_from,
+    'date_to' => $filter_date_to,
+    'per_page' => 20,
+    'page' => $current_page,
 );
 
-// İstatistikleri hesapla
-$total_payments = count($payments);
-$completed_payments = 0;
-$pending_payments = 0;
-$failed_payments = 0;
-$total_revenue = 0;
+$payments_data = metabilinc_get_payments($payment_args);
+$payments = $payments_data['payments'];
+$total_payments = $payments_data['total'];
+$total_pages = $payments_data['pages'];
 
-foreach ($payments as $payment) {
-    if ($payment['status'] === 'completed') {
-        $completed_payments++;
-        $total_revenue += $payment['amount'];
-    } elseif ($payment['status'] === 'pending') {
-        $pending_payments++;
-    } elseif ($payment['status'] === 'failed') {
-        $failed_payments++;
-    }
+// İstatistikleri getir (YENİ: Gerçek fonksiyon kullanılıyor)
+$stats = metabilinc_get_payment_stats();
+$currency_symbol = metabilinc_get_currency_symbol();
+
+// Ödeme ayarlarını kontrol et
+$payment_settings = metabilinc_get_payment_settings();
+$active_gateway = $payment_settings['active_gateway'];
+$api_configured = false;
+
+switch ($active_gateway) {
+    case 'iyzico':
+        $api_configured = !empty($payment_settings['iyzico']['api_key']) && !empty($payment_settings['iyzico']['secret_key']);
+        break;
+    case 'paytr':
+        $api_configured = !empty($payment_settings['paytr']['merchant_id']) && !empty($payment_settings['paytr']['merchant_key']);
+        break;
+    case 'stripe':
+        $api_configured = !empty($payment_settings['stripe']['secret_key']);
+        break;
 }
-
-// Durum çevirileri
-$status_labels = array(
-    'completed' => array('label' => 'Tamamlandı', 'class' => 'status-completed'),
-    'pending' => array('label' => 'Bekliyor', 'class' => 'status-pending'),
-    'failed' => array('label' => 'Başarısız', 'class' => 'status-failed'),
-    'refunded' => array('label' => 'İade', 'class' => 'status-refunded')
 );
+
+// İstatistikler metabilinc_get_payment_stats() fonksiyonundan alındı (yukarıda)
+// $stats değişkeni: total_revenue, completed, pending, failed, total
+$total_revenue = $stats['total_revenue'];
+$completed_payments = $stats['completed'];
+$pending_payments = $stats['pending'];
+$failed_payments = $stats['failed'];
+
+// Durum çevirileri - artık metabilinc_get_payment_status_label() fonksiyonu kullanılıyor
 
 get_header();
 ?>
@@ -779,6 +724,10 @@ get_header();
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                     Ödemeler
                 </a>
+                <a href="<?php echo home_url('/admin-odeme-ayarlari'); ?>" class="admin-nav-link">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Ödeme Ayarları
+                </a>
                 <a href="#" class="admin-nav-link">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                     Raporlar
@@ -817,11 +766,31 @@ get_header();
             </div>
         </div>
         
+        <!-- Gateway Status Notice -->
+        <?php if (!$api_configured): ?>
+        <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 16px 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 24px;">⚠️</span>
+            <div style="flex: 1;">
+                <strong style="color: #92400e; display: block; margin-bottom: 4px;">Ödeme Sistemi Yapılandırılmamış</strong>
+                <span style="color: #92400e; font-size: 14px;">Şu an simülasyon verileri gösteriliyor. Gerçek ödemeleri görüntülemek için lütfen ödeme ayarlarını yapılandırın.</span>
+            </div>
+            <a href="<?php echo home_url('/admin-odeme-ayarlari'); ?>" style="background: #f59e0b; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 14px; white-space: nowrap;">⚙️ Ayarları Yapılandır</a>
+        </div>
+        <?php else: ?>
+        <div style="background: #dcfce7; border: 1px solid #22c55e; border-radius: 8px; padding: 16px 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 24px;">✅</span>
+            <div>
+                <strong style="color: #166534; display: block; margin-bottom: 4px;">Ödeme Sistemi Aktif</strong>
+                <span style="color: #166534; font-size: 14px;">Aktif ödeme sağlayıcısı: <strong><?php echo metabilinc_get_payment_gateway_label($active_gateway); ?></strong></span>
+            </div>
+        </div>
+        <?php endif; ?>
+        
         <!-- Stats Cards -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon green">💰</div>
-                <div class="stat-value"><?php echo number_format($total_revenue, 2, ',', '.'); ?> ₺</div>
+                <div class="stat-value"><?php echo number_format($total_revenue, 2, ',', '.'); ?> <?php echo esc_html($currency_symbol); ?></div>
                 <div class="stat-label">Toplam Gelir</div>
             </div>
             <div class="stat-card">
@@ -842,40 +811,41 @@ get_header();
         </div>
         
         <!-- Filters -->
-        <div class="filters-section">
+        <form method="GET" action="" class="filters-section">
             <div class="filters-row">
                 <div class="filter-group">
                     <label>Durum</label>
-                    <select>
-                        <option value="">Tümü</option>
-                        <option value="completed">Tamamlandı</option>
-                        <option value="pending">Bekliyor</option>
-                        <option value="failed">Başarısız</option>
-                        <option value="refunded">İade</option>
+                    <select name="status">
+                        <option value="all" <?php selected($filter_status, 'all'); ?>>Tümü</option>
+                        <option value="completed" <?php selected($filter_status, 'completed'); ?>>Tamamlandı</option>
+                        <option value="pending" <?php selected($filter_status, 'pending'); ?>>Bekliyor</option>
+                        <option value="failed" <?php selected($filter_status, 'failed'); ?>>Başarısız</option>
+                        <option value="refunded" <?php selected($filter_status, 'refunded'); ?>>İade</option>
                     </select>
                 </div>
                 <div class="filter-group">
                     <label>Ödeme Yöntemi</label>
-                    <select>
-                        <option value="">Tümü</option>
-                        <option value="card">Kredi Kartı</option>
-                        <option value="transfer">Havale/EFT</option>
-                        <option value="free">Ücretsiz</option>
+                    <select name="gateway">
+                        <option value="all" <?php selected($filter_gateway, 'all'); ?>>Tümü</option>
+                        <option value="iyzico" <?php selected($filter_gateway, 'iyzico'); ?>>iyzico</option>
+                        <option value="paytr" <?php selected($filter_gateway, 'paytr'); ?>>PayTR</option>
+                        <option value="stripe" <?php selected($filter_gateway, 'stripe'); ?>>Stripe</option>
+                        <option value="bank_transfer" <?php selected($filter_gateway, 'bank_transfer'); ?>>Havale/EFT</option>
                     </select>
                 </div>
                 <div class="filter-group">
                     <label>Tarih Başlangıç</label>
-                    <input type="date">
+                    <input type="date" name="date_from" value="<?php echo esc_attr($filter_date_from); ?>">
                 </div>
                 <div class="filter-group">
                     <label>Tarih Bitiş</label>
-                    <input type="date">
+                    <input type="date" name="date_to" value="<?php echo esc_attr($filter_date_to); ?>">
                 </div>
                 <div class="filter-group" style="flex: 0 0 auto;">
-                    <button class="admin-btn admin-btn-primary">Filtrele</button>
+                    <button type="submit" class="admin-btn admin-btn-primary">Filtrele</button>
                 </div>
             </div>
-        </div>
+        </form>
         
         <!-- Payments Table -->
         <div class="payments-table-container">
@@ -924,12 +894,15 @@ get_header();
                             <?php if ($payment['amount'] == 0): ?>
                                 <span class="amount free">Ücretsiz</span>
                             <?php else: ?>
-                                <span class="amount"><?php echo number_format($payment['amount'], 2, ',', '.'); ?> ₺</span>
+                                <span class="amount"><?php echo number_format($payment['amount'], 2, ',', '.'); ?> <?php echo esc_html($currency_symbol); ?></span>
                             <?php endif; ?>
                         </td>
                         <td>
-                            <span class="status-badge <?php echo $status_labels[$payment['status']]['class']; ?>">
-                                <?php echo $status_labels[$payment['status']]['label']; ?>
+                            <?php 
+                            $status_info = metabilinc_get_payment_status_label($payment['status']);
+                            ?>
+                            <span class="status-badge <?php echo esc_attr($status_info['class']); ?>">
+                                <?php echo esc_html($status_info['label']); ?>
                             </span>
                         </td>
                         <td>
@@ -937,14 +910,7 @@ get_header();
                         </td>
                         <td>
                             <span class="payment-method">
-                                <?php if ($payment['method'] === 'Kredi Kartı'): ?>
-                                    💳
-                                <?php elseif ($payment['method'] === 'Havale'): ?>
-                                    🏦
-                                <?php else: ?>
-                                    🎁
-                                <?php endif; ?>
-                                <?php echo esc_html($payment['method']); ?>
+                                <?php echo metabilinc_get_payment_gateway_label($payment['gateway']); ?>
                             </span>
                         </td>
                         <td>
@@ -967,14 +933,32 @@ get_header();
             <!-- Pagination -->
             <div class="pagination">
                 <div class="pagination-info">
-                    <strong>1</strong> ile <strong><?php echo count($payments); ?></strong> arası <strong><?php echo $total_payments; ?></strong> sonuç gösteriliyor
+                    <?php 
+                    $start = ($current_page - 1) * 20 + 1;
+                    $end = min($current_page * 20, $total_payments);
+                    ?>
+                    <strong><?php echo $start; ?></strong> - <strong><?php echo $end; ?></strong> arası <strong><?php echo $total_payments; ?></strong> sonuç gösteriliyor
                 </div>
                 <div class="pagination-btns">
-                    <button class="pagination-btn" disabled>Önceki</button>
-                    <button class="pagination-btn active">1</button>
-                    <button class="pagination-btn">2</button>
-                    <button class="pagination-btn">3</button>
-                    <button class="pagination-btn">Sonraki</button>
+                    <?php if ($current_page > 1): ?>
+                        <a href="<?php echo add_query_arg('paged', $current_page - 1); ?>" class="pagination-btn">Önceki</a>
+                    <?php else: ?>
+                        <button class="pagination-btn" disabled>Önceki</button>
+                    <?php endif; ?>
+                    
+                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                        <?php if ($i == $current_page): ?>
+                            <button class="pagination-btn active"><?php echo $i; ?></button>
+                        <?php else: ?>
+                            <a href="<?php echo add_query_arg('paged', $i); ?>" class="pagination-btn"><?php echo $i; ?></a>
+                        <?php endif; ?>
+                    <?php endfor; ?>
+                    
+                    <?php if ($current_page < $total_pages): ?>
+                        <a href="<?php echo add_query_arg('paged', $current_page + 1); ?>" class="pagination-btn">Sonraki</a>
+                    <?php else: ?>
+                        <button class="pagination-btn" disabled>Sonraki</button>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
