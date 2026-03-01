@@ -228,6 +228,11 @@ function metabilinc_course_meta_callback($post) {
             <input type="text" id="course_duration" name="course_duration" value="<?php echo esc_attr($course_duration); ?>" class="widefat" placeholder="örn: 8 Hafta" />
         </p>
         <p>
+            <label for="course_start_date"><?php _e('Başlangıç Tarihi:', 'metabilinc'); ?></label>
+            <input type="text" id="course_start_date" name="course_start_date" value="<?php echo esc_attr(get_post_meta($post->ID, '_course_start_date', true)); ?>" class="widefat" placeholder="örn: 15 Ocak 2025" />
+            <span class="description"><?php _e('Kursun başlangıç tarihi (isteğe bağlı)', 'metabilinc'); ?></span>
+        </p>
+        <p>
             <label for="course_level"><?php _e('Seviye:', 'metabilinc'); ?></label>
             <select id="course_level" name="course_level" class="widefat">
                 <option value="baslangic" <?php selected($course_level, 'baslangic'); ?>><?php _e('Başlangıç', 'metabilinc'); ?></option>
@@ -275,6 +280,7 @@ function metabilinc_save_course_meta($post_id) {
         'course_price' => 'sanitize_text_field',
         'course_discounted_price' => 'sanitize_text_field',
         'course_duration' => 'sanitize_text_field',
+        'course_start_date' => 'sanitize_text_field',
         'course_level' => 'sanitize_text_field',
         'course_enrolled' => 'sanitize_text_field',
     );

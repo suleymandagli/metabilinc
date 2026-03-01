@@ -6,6 +6,18 @@
  */
 
 get_header();
+
+// Kursları veritabanından çek
+$args = array(
+    'post_type' => 'course',
+    'posts_per_page' => -1,
+    'post_status' => 'publish',
+    'orderby' => 'menu_order date',
+    'order' => 'ASC',
+);
+
+$courses_query = new WP_Query($args);
+$total_courses = $courses_query->found_posts;
 ?>
 
 <!-- Hero Section -->
@@ -19,374 +31,141 @@ get_header();
     </div>
 </section>
 
-<!-- Filters -->
-<section class="courses-filters">
-    <div class="container">
-        <div class="courses-filters-wrapper">
-            <div class="courses-search">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                <input type="text" placeholder="Kurs ara..." class="courses-search-input" id="course-search">
-            </div>
-            
-            <div class="courses-filter-group">
-                <select class="courses-filter-select" id="category-filter">
-                    <option value="">Tüm Kategoriler</option>
-                    <option value="aile">Aile Eğitimleri</option>
-                    <option value="evlilik">Evlilik Kursları</option>
-                    <option value="mini-kurs">Mini Kurslar</option>
-                </select>
-                
-                <select class="courses-filter-select" id="level-filter">
-                    <option value="">Tüm Seviyeler</option>
-                    <option value="baslangic">Başlangıç</option>
-                    <option value="orta">Orta</option>
-                    <option value="ileri">İleri</option>
-                </select>
-                
-                <select class="courses-filter-select" id="price-filter">
-                    <option value="">Fiyat</option>
-                    <option value="ucretsiz">Ücretsiz</option>
-                    <option value="ucretli">Ücretli</option>
-                </select>
-            </div>
-        </div>
-    </div>
-</section>
-
 <!-- Courses Grid -->
 <section class="courses-section">
     <div class="container">
         <div class="courses-results">
-            <p><strong>6</strong> kurs bulundu</p>
+            <p><strong><?php echo $total_courses; ?></strong> kurs bulundu</p>
         </div>
         
         <div class="courses-grid" id="courses-grid">
-            <!-- Course 1 -->
-            <article class="course-card" data-category="aile" data-level="baslangic" data-price="ucretli">
-                <div class="course-card-badge">En Çok Satan</div>
-                <div class="course-card-image">
-                    <div class="course-card-placeholder">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                        </svg>
-                    </div>
-                </div>
-                <div class="course-card-content">
-                    <span class="course-card-category">Aile Eğitimi</span>
-                    <h3 class="course-card-title">Bilinçli Aile Okulu</h3>
-                    <p class="course-card-description">0-18 yaş çocuklarınızla daha sağlıklı iletişim kurun. Etkili disiplin, duygusal bağ ve pozitif ebeveynlik tekniklerini öğrenin.</p>
-                    <div class="course-card-meta">
-                        <span class="course-card-duration">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            8 Hafta
-                        </span>
-                        <span class="course-card-level">Başlangıç</span>
-                    </div>
-                    <div class="course-card-stats">
-                        <span class="course-card-stat">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                            </svg>
-                            5.234
-                        </span>
-                        <span class="course-card-stat">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                            </svg>
-                            4.9
-                        </span>
-                    </div>
-                    <div class="course-card-footer">
-                        <div class="course-card-price">
-                            <span class="course-card-price-original">₺1.997</span>
-                            <span class="course-card-price-current">₺997</span>
+            <?php if ($courses_query->have_posts()) : ?>
+                <?php while ($courses_query->have_posts()) : $courses_query->the_post(); ?>
+                    <?php
+                    $course_id = get_the_ID();
+                    $course_price = get_post_meta($course_id, '_course_price', true);
+                    $course_discounted_price = get_post_meta($course_id, '_course_discounted_price', true);
+                    $course_duration = get_post_meta($course_id, '_course_duration', true);
+                    $course_start_date = get_post_meta($course_id, '_course_start_date', true);
+                    $course_level = get_post_meta($course_id, '_course_level', true);
+                    $course_enrolled = get_post_meta($course_id, '_course_enrolled', true);
+                    $course_is_free = get_post_meta($course_id, '_course_is_free', true);
+                    $course_is_featured = get_post_meta($course_id, '_course_is_featured', true);
+                    
+                    // Fiyat hesaplamaları
+                    $final_price = $course_discounted_price ? $course_discounted_price : $course_price;
+                    $has_discount = $course_discounted_price && $course_discounted_price < $course_price;
+                    $discount_percent = $has_discount ? round((1 - $course_discounted_price / $course_price) * 100) : 0;
+                    
+                    // Varsayılan değerler
+                    if (!$course_enrolled) $course_enrolled = rand(100, 5000);
+                    if (!$course_duration) $course_duration = '8 Hafta';
+                    
+                    // Seviye çevirisi
+                    $level_text = array(
+                        'baslangic' => 'Başlangıç',
+                        'orta' => 'Orta',
+                        'ileri' => 'İleri',
+                    );
+                    $level_display = isset($level_text[$course_level]) ? $level_text[$course_level] : 'Başlangıç';
+                    
+                    // Kategori
+                    $terms = get_the_terms($course_id, 'course_category');
+                    $category_name = 'Kurs';
+                    if ($terms && !is_wp_error($terms)) {
+                        $category_name = $terms[0]->name;
+                    }
+                    ?>
+                    
+                    <article class="course-card" data-category="<?php echo esc_attr($course_level); ?>">
+                        <?php if ($course_is_featured === '1') : ?>
+                            <div class="course-card-badge">En Çok Satan</div>
+                        <?php elseif ($course_is_free === '1') : ?>
+                            <div class="course-card-badge course-card-badge-free">Ücretsiz</div>
+                        <?php elseif ($has_discount) : ?>
+                            <div class="course-card-badge">%<?php echo esc_html($discount_percent); ?> İndirim</div>
+                        <?php endif; ?>
+                        
+                        <div class="course-card-image">
+                            <?php if (has_post_thumbnail()) : ?>
+                                <?php the_post_thumbnail('metabilinc-course-thumb', array('alt' => get_the_title())); ?>
+                            <?php else : ?>
+                                <div class="course-card-placeholder">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                    </svg>
+                                </div>
+                            <?php endif; ?>
                         </div>
-                        <a href="<?php echo esc_url(home_url('/kurs/bilincli-aile-okulu')); ?>" class="btn btn-primary">İncele</a>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Course 2 -->
-            <article class="course-card" data-category="evlilik" data-level="baslangic" data-price="ucretli">
-                <div class="course-card-image">
-                    <div class="course-card-placeholder">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                        </svg>
-                    </div>
-                </div>
-                <div class="course-card-content">
-                    <span class="course-card-category">Evlilik</span>
-                    <h3 class="course-card-title">Bilinci Evlilik Akademisi</h3>
-                    <p class="course-card-description">Evliliğinizdeki iletişimi güçlendirin, çatışmaları yapıcı çözün ve daha mutlu bir evlilik için gereken becerileri kazanın.</p>
-                    <div class="course-card-meta">
-                        <span class="course-card-duration">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            6 Hafta
-                        </span>
-                        <span class="course-card-level">Başlangıç</span>
-                    </div>
-                    <div class="course-card-stats">
-                        <span class="course-card-stat">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                            </svg>
-                            3.156
-                        </span>
-                        <span class="course-card-stat">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                            </svg>
-                            4.8
-                        </span>
-                    </div>
-                    <div class="course-card-footer">
-                        <div class="course-card-price">
-                            <span class="course-card-price-original">₺1.497</span>
-                            <span class="course-card-price-current">₺747</span>
+                        
+                        <div class="course-card-content">
+                            <span class="course-card-category"><?php echo esc_html($category_name); ?></span>
+                            <h3 class="course-card-title"><?php the_title(); ?></h3>
+                            <p class="course-card-description"><?php echo metabilinc_get_course_excerpt($course_id, 20); ?></p>
+                            
+                            <div class="course-card-meta">
+                                <span class="course-card-duration">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    <?php echo esc_html($course_duration); ?>
+                                </span>
+                                <?php if ($course_start_date) : ?>
+                                    <span class="course-card-start-date">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                                        </svg>
+                                        <?php echo esc_html($course_start_date); ?>
+                                    </span>
+                                <?php endif; ?>
+                                <span class="course-card-level"><?php echo esc_html($level_display); ?></span>
+                            </div>
+                            
+                            <div class="course-card-stats">
+                                <span class="course-card-stat">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                    </svg>
+                                    <?php echo number_format($course_enrolled); ?>
+                                </span>
+                                <span class="course-card-stat">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                    4.9
+                                </span>
+                            </div>
+                            
+                            <div class="course-card-footer">
+                                <div class="course-card-price">
+                                    <?php if ($course_is_free === '1') : ?>
+                                        <span class="course-card-price-current">Ücretsiz</span>
+                                    <?php else : ?>
+                                        <?php if ($has_discount) : ?>
+                                            <span class="course-card-price-original">₺<?php echo number_format($course_price, 0, ',', '.'); ?></span>
+                                        <?php endif; ?>
+                                        <span class="course-card-price-current">₺<?php echo number_format($final_price, 0, ',', '.'); ?></span>
+                                    <?php endif; ?>
+                                </div>
+                                <a href="<?php the_permalink(); ?>" class="btn btn-primary">İncele</a>
+                            </div>
                         </div>
-                        <a href="<?php echo esc_url(home_url('/kurs/bilincli-evlilik-akademisi')); ?>" class="btn btn-primary">İncele</a>
-                    </div>
+                    </article>
+                    
+                <?php endwhile; ?>
+                <?php wp_reset_postdata(); ?>
+                
+            <?php else : ?>
+                <div class="no-courses" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                    <p>Henüz kurs bulunmuyor.</p>
                 </div>
-            </article>
-
-            <!-- Course 3 - Free -->
-            <article class="course-card course-card-free" data-category="mini-kurs" data-level="baslangic" data-price="ucretsiz">
-                <div class="course-card-badge course-card-badge-free">Ücretsiz</div>
-                <div class="course-card-image">
-                    <div class="course-card-placeholder">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                        </svg>
-                    </div>
-                </div>
-                <div class="course-card-content">
-                    <span class="course-card-category">Mini Kurs</span>
-                    <h3 class="course-card-title">Çocuklarla Etkili İletişim</h3>
-                    <p class="course-card-description">Çocuğunuzun duygularını anlayın ve onunla daha iyi bir bağ kurun. Kanıtlanmış iletişim tekniklerini öğrenin.</p>
-                    <div class="course-card-meta">
-                        <span class="course-card-duration">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            2 Saat
-                        </span>
-                        <span class="course-card-level">Başlangıç</span>
-                    </div>
-                    <div class="course-card-stats">
-                        <span class="course-card-stat">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                            </svg>
-                            12.500
-                        </span>
-                        <span class="course-card-stat">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                            </svg>
-                            4.9
-                        </span>
-                    </div>
-                    <div class="course-card-footer">
-                        <div class="course-card-price">
-                            <span class="course-card-price-current">Ücretsiz</span>
-                        </div>
-                        <a href="<?php echo esc_url(home_url('/kurs/cocuklarla-etkili-iletisim')); ?>" class="btn btn-accent">Hemen Başla</a>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Course 4 -->
-            <article class="course-card" data-category="aile" data-level="orta" data-price="ucretli">
-                <div class="course-card-image">
-                    <div class="course-card-placeholder">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="16" x2="12" y2="12"></line>
-                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                        </svg>
-                    </div>
-                </div>
-                <div class="course-card-content">
-                    <span class="course-card-category">Aile Eğitimi</span>
-                    <h3 class="course-card-title">Ergenlik Döneminde İletişim</h3>
-                    <p class="course-card-description">Ergen çocuğunuzla sağlıklı iletişim kurun. Bu zorlu dönemi birlikte atlatın.</p>
-                    <div class="course-card-meta">
-                        <span class="course-card-duration">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            4 Hafta
-                        </span>
-                        <span class="course-card-level">Orta</span>
-                    </div>
-                    <div class="course-card-stats">
-                        <span class="course-card-stat">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                            </svg>
-                            2.156
-                        </span>
-                        <span class="course-card-stat">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                            </svg>
-                            4.7
-                        </span>
-                    </div>
-                    <div class="course-card-footer">
-                        <div class="course-card-price">
-                            <span class="course-card-price-original">₺497</span>
-                            <span class="course-card-price-current">₺247</span>
-                        </div>
-                        <a href="<?php echo esc_url(home_url('/kurs/ergenlik-donemi-iletisim')); ?>" class="btn btn-primary">İncele</a>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Course 5 -->
-            <article class="course-card" data-category="evlilik" data-level="baslangic" data-price="ucretli">
-                <div class="course-card-image">
-                    <div class="course-card-placeholder">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                        </svg>
-                    </div>
-                </div>
-                <div class="course-card-content">
-                    <span class="course-card-category">Evlilik</span>
-                    <h3 class="course-card-title">Evliliğe Hazırlık Kursu</h3>
-                    <p class="course-card-description">Evlilik öncesi çiftler için kapsamlı hazırlık programı. Sağlıklı bir evliliğin temellerini atın.</p>
-                    <div class="course-card-meta">
-                        <span class="course-card-duration">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            5 Hafta
-                        </span>
-                        <span class="course-card-level">Başlangıç</span>
-                    </div>
-                    <div class="course-card-stats">
-                        <span class="course-card-stat">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                            </svg>
-                            1.567
-                        </span>
-                        <span class="course-card-stat">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                            </svg>
-                            4.8
-                        </span>
-                    </div>
-                    <div class="course-card-footer">
-                        <div class="course-card-price">
-                            <span class="course-card-price-original">₺997</span>
-                            <span class="course-card-price-current">₺497</span>
-                        </div>
-                        <a href="<?php echo esc_url(home_url('/kurs/evlilik-hazirlik')); ?>" class="btn btn-primary">İncele</a>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Course 6 -->
-            <article class="course-card" data-category="aile" data-level="baslangic" data-price="ucretli">
-                <div class="course-card-image">
-                    <div class="course-card-placeholder">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                        </svg>
-                    </div>
-                </div>
-                <div class="course-card-content">
-                    <span class="course-card-category">Aile Eğitimi</span>
-                    <h3 class="course-card-title">Çocuklarda Özgüven Gelişimi</h3>
-                    <p class="course-card-description">Çocuğunuzun özgüvenini geliştirin. Başarılı ve mutlu bir birey olmasına yardımcı olun.</p>
-                    <div class="course-card-meta">
-                        <span class="course-card-duration">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            3 Hafta
-                        </span>
-                        <span class="course-card-level">Başlangıç</span>
-                    </div>
-                    <div class="course-card-stats">
-                        <span class="course-card-stat">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                            </svg>
-                            3.421
-                        </span>
-                        <span class="course-card-stat">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                            </svg>
-                            4.9
-                        </span>
-                    </div>
-                    <div class="course-card-footer">
-                        <div class="course-card-price">
-                            <span class="course-card-price-original">₺747</span>
-                            <span class="course-card-price-current">₺397</span>
-                        </div>
-                        <a href="<?php echo esc_url(home_url('/kurs/cocuklarda-ozguven')); ?>" class="btn btn-primary">İncele</a>
-                    </div>
-                </div>
-            </article>
-        </div>
-
-        <!-- No Results -->
-        <div class="courses-no-results" style="display: none;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <h3>Kurs Bulunamadı</h3>
-            <p>Arama kriterlerinize uygun kurs bulunmuyor. Farklı kriterler denemeyi deneyin.</p>
-            <button class="btn btn-primary" onclick="resetFilters()">Filtreleri Sıfırla</button>
-        </div>
-    </div>
-</section>
-
-<!-- CTA Section -->
-<section class="courses-cta">
-    <div class="container">
-        <div class="courses-cta-content">
-            <h2>Hangi Kursu Seçeceğinizi Bilmiyor musunuz?</h2>
-            <p>Ücretsiz mini kurslarımızla başlayarak hangi alanda ilerlemek istediğinizi keşfedin.</p>
-            <div class="courses-cta-buttons">
-                <a href="<?php echo esc_url(home_url('/mini-kurs')); ?>" class="btn btn-primary">
-                    Ücretsiz Mini Kursları İncele
-                </a>
-                <a href="<?php echo esc_url(home_url('/sss')); ?>" class="btn btn-outline">
-                    SSS
-                </a>
-            </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>

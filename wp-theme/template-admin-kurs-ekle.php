@@ -69,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_course'])) {
             update_post_meta($course_id, '_course_price', sanitize_text_field($_POST['course_price']));
             update_post_meta($course_id, '_course_discounted_price', sanitize_text_field($_POST['course_discounted_price']));
             update_post_meta($course_id, '_course_duration', sanitize_text_field($_POST['course_duration']));
+            update_post_meta($course_id, '_course_start_date', sanitize_text_field($_POST['course_start_date']));
             update_post_meta($course_id, '_course_level', sanitize_text_field($_POST['course_level']));
             update_post_meta($course_id, '_course_enrolled', intval($_POST['course_enrolled']));
             update_post_meta($course_id, '_course_instructor', sanitize_text_field($_POST['course_instructor']));
@@ -411,6 +412,12 @@ get_header();
                         <div class="admin-form-group">
                             <label for="course_duration">Süre</label>
                             <input type="text" id="course_duration" name="course_duration" value="<?php echo esc_attr($defaults['duration']); ?>" class="admin-form-input" placeholder="örn: 8 Hafta, 20 Saat">
+                        </div>
+                        
+                        <div class="admin-form-group">
+                            <label for="course_start_date">Başlangıç Tarihi</label>
+                            <input type="text" id="course_start_date" name="course_start_date" value="<?php echo esc_attr(get_post_meta($course_id, '_course_start_date', true)); ?>" class="admin-form-input" placeholder="örn: 15 Ocak 2025">
+                            <span class="admin-form-help">Kursun başlangıç tarihi (isteğe bağlı)</span>
                         </div>
                         
                         <div class="admin-form-group">
