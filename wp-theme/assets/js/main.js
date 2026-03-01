@@ -322,26 +322,60 @@
     
     // Global fonksiyonlar
     
-    // Linki panoya kopyala
+    // Linki panoya kopyala - Modern Clipboard API
     window.metabilincCopyLink = function(text) {
-        var textarea = document.createElement('textarea');
-        textarea.value = text;
-        textarea.style.position = 'fixed';
-        textarea.style.opacity = '0';
-        document.body.appendChild(textarea);
-        textarea.select();
-        
-        try {
-            document.execCommand('copy');
-            alert('Link kopyalandı!');
-        } catch (err) {
-            console.error('Kopyalama hatası:', err);
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Başarılı bildirim
+                showNotification('Link kopyalandı!', 'success');
+            }).catch(function(err) {
+                console.error('Kopyalama hatası:', err);
+                fallbackCopy(text);
+            });
+        } else {
+            fallbackCopy(text);
         }
         
-        document.body.removeChild(textarea);
+        function fallbackCopy(text) {
+            var textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                showNotification('Link kopyalandı!', 'success');
+            } catch (err) {
+                console.error('Kopyalama hatası:', err);
+                showNotification('Kopyalama başarısız oldu', 'error');
+            }
+            
+            document.body.removeChild(textarea);
+        }
+        
+        function showNotification(message, type) {
+            // Mevcut bildirimi kaldır
+            var existing = document.querySelector('.copy-notification');
+            if (existing) existing.remove();
+            
+            var notification = document.createElement('div');
+            notification.className = 'copy-notification';
+            notification.style.cssText = 'position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: ' + (type === 'success' ? 'var(--color-success, #10B981)' : 'var(--color-error, #EF4444)') + '; color: white; padding: 0.75rem 1.5rem; border-radius: 2rem; font-size: 0.875rem; font-weight: 500; z-index: 9999; animation: slideUp 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.2);';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(function() {
+                notification.style.animation = 'slideDown 0.3s ease';
+                setTimeout(function() {
+                    notification.remove();
+                }, 300);
+            }, 2000);
+        }
     };
     
-    // Instagram Story paylaşım kartı
+    // NFT-Style Paylaşım Kartı Modal
     window.metabilincShareCard = function(title, desc, url) {
         var preview = document.getElementById('share-card-preview');
         var titleEl = document.getElementById('share-card-title');
@@ -349,18 +383,11 @@
         
         if (preview && titleEl && descEl) {
             titleEl.textContent = title;
-            descEl.textContent = desc.substring(0, 100) + (desc.length > 100 ? '...' : '');
+            descEl.textContent = desc ? desc.substring(0, 120) + (desc.length > 120 ? '...' : '') : 'Ebeveynlik yolculuğunuzda uzman rehberlik ile bilinçli aile olmanın anahtarı burada.';
             
-            // Göster/gizle
-            if (preview.style.display === 'none') {
-                preview.style.display = 'block';
-                // Scroll to preview
-                setTimeout(function() {
-                    preview.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 100);
-            } else {
-                preview.style.display = 'none';
-            }
+            // Modal'ı göster
+            preview.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Sayfayı kaydırmayı engelle
         }
     };
     
