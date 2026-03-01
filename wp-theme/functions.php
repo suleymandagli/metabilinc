@@ -877,6 +877,17 @@ function metabilinc_create_default_pages() {
             'title' => 'Bilinçli Evlilik Akademisi',
             'template' => 'template-bilincli-evlilik-akademisi.php',
         ),
+        // Admin sayfaları
+        array(
+            'slug' => 'admin-kurslar',
+            'title' => 'Kurs Yönetimi',
+            'template' => 'template-admin-kurslar.php',
+        ),
+        array(
+            'slug' => 'admin-kurs-ekle',
+            'title' => 'Kurs Ekle/Düzenle',
+            'template' => 'template-admin-kurs-ekle.php',
+        ),
     );
     
     foreach ($pages as $page_data) {
@@ -1051,4 +1062,91 @@ function get_post_read_time($post_id = null) {
     $reading_time_seconds = ceil($word_count / 3.33);
     
     return $reading_time_seconds;
+}
+
+// Admin - Kurs silme AJAX handler
+function metabilinc_delete_course_handler() {
+    // Nonce kontrolü
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'metabilinc_admin_nonce')) {
+        wp_send_json_error(array('message' => 'Güvenlik doğrulaması başarısız.'));
+        return;
+    }
+    
+    // Yetki kontrolü
+    if (!is_user_logged_in()) {
+        wp_send_json_error(array('message' => 'Giriş yapmanız gerekiyor.'));
+        return;
+    }
+    
+    $user = wp_get_current_user();
+    if (!in_array('administrator', $user->roles) && !in_array('editor', $user->roles)) {
+        wp_send_json_error(array('message' => 'Bu işlem için yetkiniz yok.'));
+        return;
+    }
+    
+    // Kurs ID kontrolü
+    if (!isset($_POST['course_id']) || !is_numeric($_POST['course_id'])) {
+        wp_send_json_error(array('message' => 'Geçersiz kurs ID.'));
+        return;
+    }
+    
+    $course_id = intval($_POST['course_id']);
+    $course = get_post($course_id);
+    
+    if (!$course || $course->post_type !== 'course') {
+        wp_send_json_error(array('message' => 'Kurs bulunamadı.'));
+        return;
+    }
+    
+    // Kursu çöp kutusuna taşı
+    $result = wp_trash_post($course_id);
+    
+    if ($result) {
+        wp_send_json_success(array('message' => 'Kurs başarıyla silindi.'));
+    } else {
+        wp_send_json_error(array('message' => 'Kurs silinirken bir hata oluştu.'));
+    }
+}
+add_action('wp_ajax_metabilinc_delete_course', 'metabilinc_delete_course_handler');
+
+// Admin panel CSS ve JS enqueue
+function metabilinc_admin_enqueue_assets($hook) {
+    // Admin panel sayfalarında CSS yükle
+    if (is_page_template('template-admin-kurslar.php') || is_page_template('template-admin-kurs-ekle.php')) {
+        wp_enqueue_media();
+        wp_enqueue_style('metabilinc-admin', get_template_directory_uri() . '/assets/css/admin.css', array(), '1.0.0');
+    }
+}
+add_action('wp_enqueue_scripts', 'metabilinc_admin_enqueue_assets');
+
+// Varsayılan admin sayfalarını oluştur
+function metabilinc_create_admin_pages() {
+    $pages = array(
+        'admin-kurslar' => array(
+            'title' => 'Kurs Yönetimi',
+            'template' => 'template-admin-kurslar.php',
+        ),
+        'admin-kurs-ekle' => array(
+            'title' => 'Kurs Ekle/Düzenle',
+            'template' => 'template-admin-kurs-ekle.php',
+        ),
+    );
+    
+    foreach ($pages as $slug => $page_data) {
+        $existing_page = get_page_by_path($slug);
+        
+        if (!$existing_page) {
+            $page_id = wp_insert_post(array(
+                'post_title'   => $page_data['title'],
+                'post_name'    => $slug,
+                'post_status'  => 'publish',
+                'post_type'    => 'page',
+                'post_content' => '',
+            ));
+            
+            if ($page_id && !is_wp_error($page_id)) {
+                update_post_meta($page_id, '_wp_page_template', $page_data['template']);
+            }
+        }
+    }
 }
