@@ -1,0 +1,77 @@
+/**
+ * Metabilinç Akademi - Admin Styles
+ * 
+ * @package Metabilinc
+ */
+
+/* Admin Customizations */
+.post-type-course .wp-list-table .column-thumbnail {
+    width: 80px;
+}
+
+.post-type-course .wp-list-table .column-thumbnail img {
+    max-width: 60px;
+    height: auto;
+    border-radius: 4px;
+}
+
+/* Course Meta Box Styling */
+.metabilinc-meta-box {
+    padding: 15px;
+}
+
+.metabilinc-meta-box .field-group {
+    margin-bottom: 20px;
+}
+
+.metabilinc-meta-box .field-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.metabilinc-meta-box .field-group input,
+.metabilinc-meta-box .field-group textarea {
+    width: 100%;
+    padding: 8px;
+}
+
+.metabilinc-meta-box .field-group .description {
+    color: #666;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* Dashboard Widget */
+.metabilinc-dashboard-widget {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.metabilinc-dashboard-widget .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.metabilinc-dashboard-widget .stat-item {
+    background: #fff;
+    padding: 15px;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+}
+
+.metabilinc-dashboard-widget .stat-number {
+    font-size: 24px;
+    font-weight: 600;
+    color: #F97316;
+}
+
+.metabilinc-dashboard-widget .stat-label {
+    font-size: 12px;
+    color: #6B7280;
+    margin-top: 5px;
+}
