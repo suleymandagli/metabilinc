@@ -4649,6 +4649,265 @@ button, input, textarea, select {
     color: rgba(255, 255, 255, 0.7);
 }
 
+/* Hero Container - Grid Layout for Content + Visual */
+.home-hero .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.home-hero-content {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+
+.home-hero h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.home-hero p {
+    margin: 0 0 2rem 0;
+}
+
+.home-hero-buttons {
+    justify-content: flex-start;
+}
+
+.home-hero-stats {
+    justify-content: flex-start;
+}
+
+/* Hero Visual Section */
+.home-hero-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 500px;
+}
+
+/* Main Card */
+.home-hero-main-card {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    max-width: 380px;
+    width: 100%;
+}
+
+.home-hero-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.home-hero-card-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.home-hero-card-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0 0 0.25rem 0;
+}
+
+.home-hero-card-subtitle {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    margin: 0;
+}
+
+.home-hero-card-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.home-hero-card-feature {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-text);
+    font-size: 0.9375rem;
+}
+
+.home-hero-card-feature svg {
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.home-hero-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-secondary);
+}
+
+.home-hero-card-price-current {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.home-hero-card-price-original {
+    font-size: 1rem;
+    color: var(--color-text-light);
+    text-decoration: line-through;
+    margin-left: 0.5rem;
+}
+
+.home-hero-card-badge {
+    background: rgba(249, 115, 22, 0.15);
+    color: var(--color-accent-dark);
+    padding: 0.375rem 0.875rem;
+    border-radius: 2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* Floating Cards */
+.home-hero-float-card {
+    position: absolute;
+    background: white;
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+.home-hero-float-rating {
+    top: -10px;
+    right: -20px;
+    animation-delay: 0s;
+}
+
+.home-hero-float-graduates {
+    bottom: 20px;
+    left: -30px;
+    animation-delay: 1.5s;
+}
+
+.home-hero-float-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.home-hero-float-icon-star {
+    background: rgba(34, 197, 94, 0.15);
+    font-size: 1.25rem;
+}
+
+.home-hero-float-icon-users {
+    background: rgba(31, 41, 55, 0.1);
+    color: var(--color-primary);
+}
+
+.home-hero-float-value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-text);
+    line-height: 1.2;
+}
+
+.home-hero-float-label {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .home-hero .container {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        text-align: center;
+    }
+    
+    .home-hero-content {
+        text-align: center;
+    }
+    
+    .home-hero-buttons,
+    .home-hero-stats {
+        justify-content: center;
+    }
+    
+    .home-hero-visual {
+        min-height: 450px;
+    }
+    
+    .home-hero-float-rating {
+        right: 10px;
+    }
+    
+    .home-hero-float-graduates {
+        left: 10px;
+    }
+}
+
+@media (max-width: 640px) {
+    .home-hero-visual {
+        min-height: 400px;
+    }
+    
+    .home-hero-main-card {
+        max-width: 320px;
+        padding: 1.5rem;
+    }
+    
+    .home-hero-float-card {
+        padding: 0.75rem 1rem;
+    }
+    
+    .home-hero-float-rating {
+        top: 0;
+        right: 0;
+    }
+    
+    .home-hero-float-graduates {
+        bottom: 0;
+        left: 0;
+    }
+}
+
 .home-section-header {
     text-align: center;
     max-width: 700px;

@@ -47,6 +47,84 @@ get_header();
                 </div>
             </div>
         </div>
+        
+        <!-- Hero Visual with Floating Cards -->
+        <div class="home-hero-visual">
+            <!-- Main Card -->
+            <div class="home-hero-main-card">
+                <div class="home-hero-card-header">
+                    <div class="home-hero-card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </div>
+                    <div class="home-hero-card-title-wrap">
+                        <h3 class="home-hero-card-title">Bilinçli Aile Okulu</h3>
+                        <p class="home-hero-card-subtitle">0-18 yaş çocuklar için</p>
+                    </div>
+                </div>
+                
+                <div class="home-hero-card-features">
+                    <div class="home-hero-card-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <span>Etkili İletişim Teknikleri</span>
+                    </div>
+                    <div class="home-hero-card-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                        </svg>
+                        <span>Pozitif Disiplin Yöntemleri</span>
+                    </div>
+                    <div class="home-hero-card-feature">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                        <span>Duygusal Bağ Kurma</span>
+                    </div>
+                </div>
+                
+                <div class="home-hero-card-footer">
+                    <div class="home-hero-card-price">
+                        <span class="home-hero-card-price-current">₺997</span>
+                        <span class="home-hero-card-price-original">₺1997</span>
+                    </div>
+                    <span class="home-hero-card-badge">%50 İndirim</span>
+                </div>
+            </div>
+            
+            <!-- Floating Rating Card (Top Right) -->
+            <div class="home-hero-float-card home-hero-float-rating">
+                <div class="home-hero-float-icon home-hero-float-icon-star">
+                    <span>⭐</span>
+                </div>
+                <div class="home-hero-float-content">
+                    <div class="home-hero-float-value">4.9/5</div>
+                    <div class="home-hero-float-label">Puan</div>
+                </div>
+            </div>
+            
+            <!-- Floating Graduates Card (Bottom Left) -->
+            <div class="home-hero-float-card home-hero-float-graduates">
+                <div class="home-hero-float-icon home-hero-float-icon-users">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+                <div class="home-hero-float-content">
+                    <div class="home-hero-float-value">5000+</div>
+                    <div class="home-hero-float-label">Mezun</div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
