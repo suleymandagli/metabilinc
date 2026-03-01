@@ -893,6 +893,11 @@ function metabilinc_create_default_pages() {
             'title' => 'Kurs Ekle/Düzenle',
             'template' => 'template-admin-kurs-ekle.php',
         ),
+        array(
+            'slug' => 'admin-odemeler',
+            'title' => 'Ödeme Yönetimi',
+            'template' => 'template-admin-odemeler.php',
+        ),
     );
     
     foreach ($pages as $page_data) {
@@ -1117,7 +1122,7 @@ add_action('wp_ajax_metabilinc_delete_course', 'metabilinc_delete_course_handler
 // Admin panel CSS ve JS enqueue
 function metabilinc_admin_enqueue_assets($hook) {
     // Admin panel sayfalarında CSS yükle
-    if (is_page_template('template-admin-dashboard.php') || is_page_template('template-admin-kurslar.php') || is_page_template('template-admin-kurs-ekle.php')) {
+    if (is_page_template('template-admin-dashboard.php') || is_page_template('template-admin-kurslar.php') || is_page_template('template-admin-kurs-ekle.php') || is_page_template('template-admin-odemeler.php')) {
         wp_enqueue_media();
         wp_enqueue_style('metabilinc-admin', get_template_directory_uri() . '/assets/css/admin.css', array(), '1.0.0');
     }
@@ -1138,6 +1143,10 @@ function metabilinc_create_admin_pages() {
         'admin-kurs-ekle' => array(
             'title' => 'Kurs Ekle/Düzenle',
             'template' => 'template-admin-kurs-ekle.php',
+        ),
+        'admin-odemeler' => array(
+            'title' => 'Ödeme Yönetimi',
+            'template' => 'template-admin-odemeler.php',
         ),
     );
     
