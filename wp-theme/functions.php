@@ -879,6 +879,11 @@ function metabilinc_create_default_pages() {
         ),
         // Admin sayfaları
         array(
+            'slug' => 'admin-dashboard',
+            'title' => 'Admin Dashboard',
+            'template' => 'template-admin-dashboard.php',
+        ),
+        array(
             'slug' => 'admin-kurslar',
             'title' => 'Kurs Yönetimi',
             'template' => 'template-admin-kurslar.php',
@@ -1112,7 +1117,7 @@ add_action('wp_ajax_metabilinc_delete_course', 'metabilinc_delete_course_handler
 // Admin panel CSS ve JS enqueue
 function metabilinc_admin_enqueue_assets($hook) {
     // Admin panel sayfalarında CSS yükle
-    if (is_page_template('template-admin-kurslar.php') || is_page_template('template-admin-kurs-ekle.php')) {
+    if (is_page_template('template-admin-dashboard.php') || is_page_template('template-admin-kurslar.php') || is_page_template('template-admin-kurs-ekle.php')) {
         wp_enqueue_media();
         wp_enqueue_style('metabilinc-admin', get_template_directory_uri() . '/assets/css/admin.css', array(), '1.0.0');
     }
@@ -1122,6 +1127,10 @@ add_action('wp_enqueue_scripts', 'metabilinc_admin_enqueue_assets');
 // Varsayılan admin sayfalarını oluştur
 function metabilinc_create_admin_pages() {
     $pages = array(
+        'admin-dashboard' => array(
+            'title' => 'Admin Dashboard',
+            'template' => 'template-admin-dashboard.php',
+        ),
         'admin-kurslar' => array(
             'title' => 'Kurs Yönetimi',
             'template' => 'template-admin-kurslar.php',
