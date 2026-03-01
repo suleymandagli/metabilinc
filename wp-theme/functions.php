@@ -1033,3 +1033,22 @@ function metabilinc_create_sample_categories() {
     }
 }
 add_action('init', 'metabilinc_create_sample_categories');
+
+// Blog yazısı okuma süresi hesapla (saniye olarak döner)
+function get_post_read_time($post_id = null) {
+    if (!$post_id) {
+        $post_id = get_the_ID();
+    }
+    
+    if (!$post_id) {
+        return 0;
+    }
+    
+    $content = get_post_field('post_content', $post_id);
+    $word_count = str_word_count(strip_tags($content));
+    
+    // Ortalama okuma hızı: 200 kelime/dakika = 3.33 kelime/saniye
+    $reading_time_seconds = ceil($word_count / 3.33);
+    
+    return $reading_time_seconds;
+}
